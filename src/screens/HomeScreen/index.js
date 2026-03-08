@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView, Image} from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import styles from './style';
+import COLORS from "../../constants/colors";
 
 export default function HomeScreen() {
   return (
@@ -9,9 +10,9 @@ export default function HomeScreen() {
       {/* HEADER */}
       <View>
         <View style={styles.header}>
-            <Text style={{color:"#fff"}}>Olá, Elias</Text>
+            <Text style={{color: COLORS.white}}>Olá, Elias</Text>
             <TouchableOpacity onPress={() => alert("Logout")} style={styles.logoutButton}>
-            <Ionicons name="log-out" size={32} color="#fff" />
+            <Ionicons name="log-out" size={32} color={COLORS.white} />
             </TouchableOpacity>
         </View>
         <View style={styles.infoView}>

@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { login } from '../../services/authService';
 import { translateError } from '../../utils/errorTranslator';
 import styles from './style';
+import COLORS from '../../constants/colors';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -32,7 +33,7 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <LinearGradient
-      colors={['#0D47A1', '#1565C0', '#42A5F5']}
+      colors={[COLORS.primaryDark, COLORS.primary, COLORS.primaryLight]}
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -63,7 +64,7 @@ export default function LoginScreen({ navigation }) {
                 <TextInput
                   style={styles.input}
                   placeholder="seu@email.com"
-                  placeholderTextColor="#A0AEC0"
+                  placeholderTextColor={COLORS.grey}
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
@@ -83,7 +84,7 @@ export default function LoginScreen({ navigation }) {
                 <TextInput
                   style={styles.input}
                   placeholder="••••••••"
-                  placeholderTextColor="#A0AEC0"
+                  placeholderTextColor={COLORS.grey}
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!passwordVisible}
@@ -111,7 +112,7 @@ export default function LoginScreen({ navigation }) {
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color="#ffffff" />
+                <ActivityIndicator color={COLORS.white} />
               ) : (
                 <Text style={styles.loginButtonText}>ENTRAR</Text>
               )}
