@@ -1,14 +1,14 @@
 ---
-title: "[]{#_b96x49gnr4sw .anchor}DOCUMENTO DE REQUISITOS"
+title: "DOCUMENTO DE REQUISITOS"
 ---
 
-## **1. Visão Geral** {#visão-geral}
+## **1. Visão Geral**
 
 O sistema visa digitalizar o trabalho de campo dos Agentes Comunitários de Saúde, permitindo o gerenciamento eficiente de famílias, indivíduos e indicadores de saúde em suas respectivas microáreas.
 
-## **2. Requisitos Funcionais (RF)** {#requisitos-funcionais-rf}
+## **2. Requisitos Funcionais (RF)**
 
-### **2.1 Gestão de Acessos e Usuários** {#gestão-de-acessos-e-usuários}
+### **2.1 Gestão de Acessos e Usuários**
 
 - **RF-01 (Cadastro de ACS):** O sistema deve permitir que administradores cadastrem novos agentes.
 
@@ -22,7 +22,7 @@ O sistema visa digitalizar o trabalho de campo dos Agentes Comunitários de Saú
 
   - **Segurança:** Bloqueio temporário após 5 tentativas mal-sucedidas.
 
-### **2.2 Gestão de Territorialização (Famílias)** {#gestão-de-territorialização-famílias}
+### **2.2 Gestão de Territorialização (Famílias)**
 
 - **RF-03 (Cadastro de Família):** Registro do núcleo familiar e domiciliar.
 
@@ -32,7 +32,7 @@ O sistema visa digitalizar o trabalho de campo dos Agentes Comunitários de Saú
 
 - **RF-04 (Edição de Domicílio):** Permite a atualização de qualquer campo do endereço ou tipologia de moradia.
 
-### **2.3 Gestão de Indivíduos** {#gestão-de-indivíduos}
+### **2.3 Gestão de Indivíduos**
 
 - **RF-05 (Cadastro de Membro):** Vinculação de pessoas a uma família existente.
 
@@ -52,7 +52,7 @@ O sistema visa digitalizar o trabalho de campo dos Agentes Comunitários de Saú
 
 - **RF-06 (Vínculo Familiar):** O sistema não deve permitir o cadastro de um indivíduo sem que este esteja associado a um código de família ou endereço.
 
-### **2.4 Recuperação e Manutenção de Dados** {#recuperação-e-manutenção-de-dados}
+### **2.4 Recuperação e Manutenção de Dados**
 
 - **RF-07 (Busca Dinâmica):** Filtro global que processa:
 
@@ -62,7 +62,7 @@ O sistema visa digitalizar o trabalho de campo dos Agentes Comunitários de Saú
 
 - **RF-08 (Histórico de Alterações):** O sistema deve registrar um log interno de quem alterou o dado e em qual data/hora (Audit Log), garantindo a integridade da informação.
 
-## **3. Requisitos Não Funcionais (RNF)** {#requisitos-não-funcionais-rnf}
+## **3. Requisitos Não Funcionais (RNF)**
 
 | **Categoria**   | **Requisito**                                                                                       |
 |-----------------|-----------------------------------------------------------------------------------------------------|
