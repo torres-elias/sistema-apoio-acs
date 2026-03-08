@@ -1,9 +1,21 @@
-import { View, Text, TouchableOpacity, ScrollView, Image} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import styles from './style';
 import COLORS from "../../constants/colors";
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function HomeScreen() {
+    const { signOut } = useAuth();
+
+    async function handleLogout() {
+        try {
+            await signOut();
+        } catch (error) {
+            console.log(error);
+            Alert.alert('Erro', error.message || 'Não foi possível deslogar.');
+        }
+    }
+    
   return (
     <View style={styles.container}>
 
@@ -11,7 +23,7 @@ export default function HomeScreen() {
       <View>
         <View style={styles.header}>
             <Text style={{color: COLORS.white}}>Olá, Elias</Text>
-            <TouchableOpacity onPress={() => alert("Logout")} style={styles.logoutButton}>
+            <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
             <Ionicons name="log-out" size={32} color={COLORS.white} />
             </TouchableOpacity>
         </View>

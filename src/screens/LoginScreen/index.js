@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, Platform, ActivityIndicator, Alert, } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { login } from '../../services/authService';
 import { translateError } from '../../utils/errorTranslator';
 import styles from './style';
 import COLORS from '../../constants/colors';
+import { useAuth } from '../../contexts/AuthContext';
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
+  const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,12 +21,10 @@ export default function LoginScreen({ navigation }) {
 
     setLoading(true);
     try {
-      await login(email.trim().toLowerCase(), password);
-      navigation.replace('Main');
+      await signIn(email.trim().toLowerCase(), password);
     } catch (error) {
       console.log(error);
-      console.log(error.code);
-      Alert.alert('Erro no login', translateError(error.code));
+      Alert.alert('Erro no login', error.message || translateError(error.code));
     } finally {
       setLoading(false);
     }
