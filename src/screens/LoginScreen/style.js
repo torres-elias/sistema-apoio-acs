@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#64748B',
+    color: COLORS.greyDark,
     marginBottom: 8,
     letterSpacing: 0.8,
   },
@@ -58,11 +58,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
     paddingHorizontal: 14,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.grey,
   },
 
   inputIcon: {
@@ -76,31 +76,31 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 10,
     fontSize: 15,
-    color: '#1A202C',
+    color: COLORS.greyDark,
   },
 
   loginButton: {
-    backgroundColor: '#1565C0',
+    backgroundColor: COLORS.primary,
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 8,
     elevation: 4,
-    shadowColor: '#1565C0',
+    shadowColor: COLORS.primaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
   },
 
   loginButtonText: {
-    color: '#ffffff',
+    color: COLORS.white,
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
 
   version: {
-    color: '#F1F5F9',
+    color: COLORS.white,
     fontSize: 12,
     marginTop: 32,
   },
