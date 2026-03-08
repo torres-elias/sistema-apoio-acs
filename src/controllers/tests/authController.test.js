@@ -11,10 +11,13 @@ import * as authService from '../../services/authService';
 
 describe('authController', () => {
   beforeEach(() => {
+    // Reset mocks between tests to avoid cross-test interference
     vi.resetAllMocks();
   });
 
   it('login - resolves with user on success', async () => {
+    // Caso de sucesso: quando o serviço retorna um usuário válido,
+    // o controller deve retornar esse usuário inalterado.
     const mockUser = { uid: '123', email: 'a@b.com' };
     authService.login.mockResolvedValue(mockUser);
 
@@ -24,6 +27,8 @@ describe('authController', () => {
   });
 
   it('login - throws a translated Error on service failure', async () => {
+    // Caso de falha: quando o serviço rejeita, o controller deve
+    // propagar um erro (já traduzido pelo controller).
     const err = { code: 'auth/wrong-password', message: 'Bad' };
     authService.login.mockRejectedValue(err);
 
@@ -32,6 +37,7 @@ describe('authController', () => {
   });
 
   it('logout - resolves on success', async () => {
+    // Logout com sucesso: o controller deve resolver sem valor.
     authService.logout.mockResolvedValue();
 
     await expect(authController.logout()).resolves.toBeUndefined();
@@ -39,6 +45,7 @@ describe('authController', () => {
   });
 
   it('logout - throws a translated Error on service failure', async () => {
+    // Logout com falha: o controller deve propagar um erro traduzido.
     const err = { code: 'auth/error', message: 'Fail' };
     authService.logout.mockRejectedValue(err);
 
