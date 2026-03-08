@@ -82,7 +82,6 @@ export default StyleSheet.create({
   iconBtn: {
     padding: 8,
   },
-  // Estilos do Modal de Cadastro
   modalContainer: {
     flex: 1,
     backgroundColor: "#f4f4f4",
@@ -149,5 +148,22 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 5,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: '#333',
   },
 });
