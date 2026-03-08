@@ -10,7 +10,9 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:compose": "docker compose run --rm tests",
+    "test:ci": "npm run test:run"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
