@@ -12,6 +12,9 @@ const COLORS = {
     white: '#f5f5ff',
     grey: '#A0AEC0',
     greyDark: '#64748B',
+    background: '#f4f4f4',
+    card: '#ebebeb',
+    text: '#1f2937'
 }
 
 export default COLORS;
