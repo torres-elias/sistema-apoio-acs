@@ -21,10 +21,18 @@ export default function FamiliesScreen({ navigation }) {
   const [bairro, setBairro] = useState('');
   const [tipoMoradia, setTipoMoradia] = useState('Casa');
 
+  // Estados de Nova Visita
+  const [visitaModalVisible, setVisitaModalVisible] = useState(false);
+  const [pacienteSelecionado, setPacienteSelecionado] = useState('');
+  const [tipoVisita, setTipoVisita] = useState('Rotina');
+  const [motivoVisita, setMotivoVisita] = useState('');
+
   const tiposMoradia = [
     'Casa', 'Prédio', 'Estúdio', 'Kitnet', 'Apartamento', 
     'Condomínio', 'Chácara', 'Sítio', 'Fazenda', 'República', 'Casa de Pensão'
   ];
+
+  const tiposDeVisita = ['Rotina', 'Busca Ativa', 'Urgência'];
 
   // Busca de CEP Automática (RF-03)
   const handleCepChange = async (value) => {
@@ -91,6 +99,14 @@ export default function FamiliesScreen({ navigation }) {
     ]);
   };
 
+  const openVisitaModal = (nomeResponsavel) => {
+    setPacienteSelecionado(nomeResponsavel);
+    setTipoVisita('Rotina');
+    setMotivoVisita('');
+    setPressaoArterial('');
+    setVisitaModalVisible(true);
+  };
+
   const closeModal = () => {
     setModalVisible(false);
     setEditingId(null);
@@ -139,6 +155,10 @@ export default function FamiliesScreen({ navigation }) {
               </View>
             </View>
             <View style={styles.actionButtons}>
+              {/* NOVO BOTÃO: Abrir Nova Visita */}
+              <TouchableOpacity style={styles.iconBtn} onPress={() => openVisitaModal(item.responsible)}>
+                <FontAwesome5 name="clipboard-list" size={20} color="#28a745" />
+              </TouchableOpacity>
               <TouchableOpacity style={styles.iconBtn} onPress={() => handleEdit(item)}>
                 <Ionicons name="pencil" size={20} color="#2f80c1" />
               </TouchableOpacity>
@@ -208,6 +228,73 @@ export default function FamiliesScreen({ navigation }) {
             </TouchableOpacity>
           </ScrollView>
         </KeyboardAvoidingView>
+      </Modal>
+
+     {/* FORMULÁRIO MODAL (VISITA) */}
+      <Modal visible={visitaModalVisible} animationType="slide">
+        <View style={styles.visitaContainer}>
+          <View style={styles.visitaHeader}>
+            <View style={styles.visitaHeaderContent}>
+              <TouchableOpacity style={styles.visitaBackButton} onPress={() => setVisitaModalVisible(false)}>
+                <Ionicons name="chevron-back" size={28} color="#fff" />
+              </TouchableOpacity>
+              <View>
+                <Text style={styles.visitaTitle}>Nova Visita</Text>
+                <Text style={styles.visitaSubtitle}>{pacienteSelecionado}</Text>
+              </View>
+            </View>
+          </View>
+
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}
+          >
+            <ScrollView contentContainerStyle={styles.visitaScrollContent} showsVerticalScrollIndicator={false}>
+
+              <View style={styles.visitaCard}>
+                
+                <View style={styles.visitaInputGroup}>
+                  <Text style={styles.visitaLabel}>TIPO DE VISITA</Text>
+                  <View style={styles.visitaRadioGroup}>
+                    {tiposDeVisita.map((tipo) => (
+                      <TouchableOpacity
+                        key={tipo}
+                        style={[styles.visitaRadioButton, tipoVisita === tipo && styles.visitaRadioButtonActive]}
+                        onPress={() => setTipoVisita(tipo)}
+                      >
+                        <Text style={[styles.visitaRadioText, tipoVisita === tipo && styles.visitaRadioTextActive]}>
+                          {tipo}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+
+                <View style={styles.visitaInputGroup}>
+                  <Text style={styles.visitaLabel}>PACIENTE (OPCIONAL)</Text>
+                  <TouchableOpacity style={styles.visitaInputContainer}>
+                    <Text style={styles.visitaInputText}>Visita geral à família</Text>
+                    <Ionicons name="chevron-down" size={20} color="#999" />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.visitaInputGroup}>
+                  <Text style={styles.visitaLabel}>MOTIVO</Text>
+                  <View style={styles.visitaInputContainer}>
+                    <TextInput
+                      style={styles.visitaTextInputField}
+                      placeholder="Ex: Acompanhamento mensal"
+                      placeholderTextColor="#999"
+                      value={motivoVisita}
+                      onChangeText={setMotivoVisita}
+                    />
+                  </View>
+                </View>
+
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </View>
       </Modal>
 
       {/* FAB */}
