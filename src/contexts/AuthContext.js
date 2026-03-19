@@ -3,15 +3,15 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import * as authController from '../controllers/authController';
 
-// Contexto de autenticação: fornece `user`, `initializing` e ações `signIn`/`signOut`.
-// Use `useAuth()` para acessar o estado e as ações em qualquer componente.
+// Contexto de autenticação: fornece 'user', 'initializing' e ações 'signIn'/'signOut'.
+// Use 'useAuth()' para acessar o estado e as ações em qualquer componente.
 const AuthContext = createContext(null);
 
 /**
  * AuthProvider
- * - Observa o estado de autenticação do Firebase (`onAuthStateChanged`).
- * - Mantém `user` e `initializing` no estado.
- * - Expõe `signIn(email, password)` e `signOut()` que delegam ao `authController`.
+ * - Observa o estado de autenticação do Firebase ('onAuthStateChanged').
+ * - Mantém 'user' e 'initializing' no estado.
+ * - Expõe 'signIn(email, password)' e 'signOut()' que delegam ao 'authController'.
  */
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -28,8 +28,8 @@ export function AuthProvider({ children }) {
 
   /**
    * signIn
-   * - Faz login via `authController.login`.
-   * - Não altera o estado `user` diretamente; o listener do Firebase atualiza o estado.
+   * - Faz login via 'authController.login'.
+   * - Não altera o estado 'user' diretamente; o listener do Firebase atualiza o estado.
    */
   async function signIn(email, password) {
     return authController.login(email, password);
@@ -37,8 +37,8 @@ export function AuthProvider({ children }) {
 
   /**
    * signOut
-   * - Desloga o usuário via `authController.logout`.
-   * - O listener do Firebase limpará `user` automaticamente.
+   * - Desloga o usuário via 'authController.logout'.
+   * - O listener do Firebase limpará 'user' automaticamente.
    */
   async function signOut() {
     return authController.logout();
@@ -53,8 +53,8 @@ export function AuthProvider({ children }) {
 
 /**
  * useAuth
- * - Hook para consumir o `AuthContext`.
- * - Retorna `{ user, initializing, signIn, signOut }`.
+ * - Hook para consumir o 'AuthContext'.
+ * - Retorna '{ user, initializing, signIn, signOut }'.
  */
 export function useAuth() {
   return useContext(AuthContext);
