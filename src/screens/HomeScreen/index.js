@@ -1,109 +1,179 @@
-import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from "react-native";
-import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import { useState, useCallback } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from "react-native";
+import { Ionicons, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFocusEffect } from '@react-navigation/native';
+import { useAuth } from '../../contexts/AuthContext';
+import * as familyController from '../../controllers/familyController';
 import styles from './style';
 import COLORS from "../../constants/colors";
-import { useAuth } from '../../contexts/AuthContext';
 
-export default function HomeScreen() {
-    const { signOut } = useAuth();
+export default function HomeScreen({ navigation }) {
+  const { user, signOut } = useAuth();
+  const [families, setFamilies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    async function handleLogout() {
-        try {
-            await signOut();
-        } catch (error) {
-            console.log(error);
-            Alert.alert('Erro', error.message || 'Não foi possível deslogar.');
-        }
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [])
+  );
+
+  async function loadData() {
+    setLoading(true);
+    try {
+      const data = await familyController.getFamilies(user.uid);
+      setFamilies(data);
+    } catch (error) {
+      Alert.alert('Erro', error.message);
+    } finally {
+      setLoading(false);
     }
-    
+  }
+
+  async function handleLogout() {
+    try {
+      await signOut();
+    } catch (error) {
+      Alert.alert('Erro', error.message || 'Não foi possível deslogar.');
+    }
+  }
+
+  // Calculate stats from families data
+  const totalFamilies = families.length;
+  const totalMembers = families.reduce((acc, f) => acc + 1 + (f.membros?.length || 0), 0);
+  const allMembers = families.flatMap(f => f.membros || []);
+  const hipertensos = allMembers.filter(m => m.condicoes?.includes('hipertensao')).length;
+  const diabeticos = allMembers.filter(m => m.condicoes?.includes('diabetes')).length;
+  const gestantes = allMembers.filter(m => m.gestante === true).length;
+  const criancas = allMembers.filter(m => {
+    if (!m.dataNascimento) return false;
+    const parts = m.dataNascimento.split('/');
+    if (parts.length !== 3) return false;
+    const birth = new Date(parts[2], parts[1] - 1, parts[0]);
+    const age = Math.floor((Date.now() - birth.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+    return age >= 0 && age <= 12;
+  }).length;
+
+  // TODO: visits count will come from visitService
+  const visitsThisMonth = 0;
+
   return (
     <View style={styles.container}>
-
       {/* HEADER */}
-      <View>
-        <View style={styles.header}>
-            <Text style={{color: COLORS.white}}>Olá, Elias</Text>
-            <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-            <Ionicons name="log-out" size={32} color={COLORS.white} />
-            </TouchableOpacity>
-        </View>
-        <View style={styles.infoView}>
-            <TouchableOpacity style={styles.infoCard}>
-                <Text style={styles.infoCardText}>5</Text>
-                <Text style={styles.infoCardText}>Familias</Text>
-                <Text style={styles.infoCardText}>2 Visitadas</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.infoCard}>
-                <Text style={styles.infoCardText}>10</Text>
-                <Text style={styles.infoCardText}>Indivíduos</Text>
-                <Text style={styles.infoCardText}>0 Visitados</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.infoCard}>
-                <Text style={styles.infoCardText}>3</Text>
-                <Text style={styles.infoCardText}>Vistas/Mês</Text>
-                <Text style={styles.infoCardText}>Março 2026</Text>
-            </TouchableOpacity>
-        </View>
-        </View>
-        <ScrollView>
-        {/* ACESSOS RAPIDOS */}
-        <Text style={styles.sectionTitle}>ACESSOS RÁPIDOS</Text>
-
-        <View style={styles.grid}>
-
-            <TouchableOpacity style={styles.card}>
-                <FontAwesome5 name="home" size={30} color="#000000"/>
-                <Text style={styles.cardText}>Familias</Text>
-                <Text style={styles.cardText}>5 cadastradas</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.card}>
-            <FontAwesome5 name="calendar-alt" size={30} color="#000000"/>
-            <Text style={styles.cardText}>Visitas</Text>
-            <Text style={styles.cardText}>3 este mês</Text>
-            </TouchableOpacity>
-
-
+      <View style={styles.header}>
+        <View style={styles.headerRow}>
+          <View>
+            <Text style={styles.greeting}>Olá</Text>
+            <Text style={styles.userName}>{user?.displayName || user?.email?.split('@')[0]}</Text>
+          </View>
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <Ionicons name="log-out-outline" size={24} color="#fff" />
+          </TouchableOpacity>
         </View>
 
-        {/* PERFIL */}
-        <Text style={styles.sectionTitle}>PERFIL DE TRABALHO</Text>
+        {/* STATS */}
+        <View style={styles.statsRow}>
+          <View style={styles.statCard}>
+            <Text style={styles.statNumber}>{totalFamilies}</Text>
+            <Text style={styles.statLabel}>Famílias</Text>
+            <Text style={styles.statSub}>cadastradas</Text>
+          </View>
+          <View style={styles.statCard}>
+            <Text style={styles.statNumber}>{totalMembers}</Text>
+            <Text style={styles.statLabel}>Indivíduos</Text>
+            <Text style={styles.statSub}>vinculados</Text>
+          </View>
+          <View style={styles.statCard}>
+            <Text style={styles.statNumber}>{visitsThisMonth}</Text>
+            <Text style={styles.statLabel}>Visitas/Mês</Text>
+            <Text style={styles.statSub}>Março 2026</Text>
+          </View>
+        </View>
+      </View>
 
-            <View style={styles.profileBox}>
-                <TouchableOpacity style={styles.profileCard}>
-                    <FontAwesome5 name="heartbeat" size={30} color="#ff3c3c"/>
-                    <Text>Hipertensos</Text>
-                    <View style={[styles.profileCardNumber,{backgroundColor:"#ff3c3c22"}]}>
-                        <Text style={{color:"#ff3c3c"}}>5</Text>
-                    </View>
-                </TouchableOpacity>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      ) : (
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          {/* QUICK ACCESS */}
+          <Text style={styles.sectionTitle}>ACESSOS RÁPIDOS</Text>
+          <View style={styles.quickAccessRow}>
+            <TouchableOpacity
+              style={styles.quickCard}
+              onPress={() => navigation.navigate('Familias')}
+            >
+              <View style={styles.quickIconBox}>
+                <FontAwesome5 name="home" size={22} color={COLORS.primary} />
+              </View>
+              <Text style={styles.quickCardTitle}>Famílias</Text>
+              <Text style={styles.quickCardSub}>{totalFamilies} cadastradas</Text>
+            </TouchableOpacity>
 
-                <TouchableOpacity style={styles.profileCard}>
-                    <FontAwesome5 name="tint" size={30} color="#ff3cce"/>
-                    <Text>Diabéticos</Text>
-                    <View style={[styles.profileCardNumber,{backgroundColor:"#ff3cce22"}]}>
-                        <Text style={{color:"#ff3cce"}}>7</Text>
-                    </View>
-                </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.quickCard}
+              onPress={() => navigation.navigate('Visitas')}
+            >
+              <View style={styles.quickIconBox}>
+                <FontAwesome5 name="calendar-alt" size={22} color={COLORS.primary} />
+              </View>
+              <Text style={styles.quickCardTitle}>Visitas</Text>
+              <Text style={styles.quickCardSub}>{visitsThisMonth} este mês</Text>
+            </TouchableOpacity>
+          </View>
 
-                <TouchableOpacity style={styles.profileCard}>
-                    <FontAwesome5 name="female" size={30} color="#ff7ab6"/>
-                    <Text>Gestantes</Text>
-                    <View style={[styles.profileCardNumber,{backgroundColor:"#ff7ab622"}]}>
-                        <Text style={{color:"#ff7ab6"}}>10</Text>
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.profileCard}>
-                    <FontAwesome5 name="child" size={30} color="#4c8dff"/>
-                    <Text>Crianças até 12 anos</Text>
-                    <View style={[styles.profileCardNumber,{backgroundColor:"#4c8dff22"}]}>
-                        <Text style={{color:"#4c8dff"}}>81</Text>
-                    </View>
-                </TouchableOpacity>
+          {/* FAMILIES PROFILE */}
+          <Text style={styles.sectionTitle}>PERFIL DAS FAMÍLIAS</Text>
+          <View style={styles.profileBox}>
+            <View style={styles.profileRow}>
+              <View style={styles.profileIconBox}>
+                <FontAwesome5 name="heartbeat" size={18} color="#EF4444" />
+              </View>
+              <Text style={styles.profileLabel}>Hipertensos</Text>
+              <View style={[styles.profileBadge, { backgroundColor: '#EF444414' }]}>
+                <Text style={[styles.profileBadgeText, { color: '#EF4444' }]}>{hipertensos}</Text>
+              </View>
             </View>
-        </ScrollView>
 
+            <View style={styles.profileDivider} />
+
+            <View style={styles.profileRow}>
+              <View style={styles.profileIconBox}>
+                <MaterialCommunityIcons name="water" size={20} color="#F59E0B" />
+              </View>
+              <Text style={styles.profileLabel}>Diabéticos</Text>
+              <View style={[styles.profileBadge, { backgroundColor: '#F59E0B14' }]}>
+                <Text style={[styles.profileBadgeText, { color: '#F59E0B' }]}>{diabeticos}</Text>
+              </View>
+            </View>
+
+            <View style={styles.profileDivider} />
+
+            <View style={styles.profileRow}>
+              <View style={styles.profileIconBox}>
+                <MaterialCommunityIcons name="human-pregnant" size={20} color="#EC4899" />
+              </View>
+              <Text style={styles.profileLabel}>Gestantes</Text>
+              <View style={[styles.profileBadge, { backgroundColor: '#EC489914' }]}>
+                <Text style={[styles.profileBadgeText, { color: '#EC4899' }]}>{gestantes}</Text>
+              </View>
+            </View>
+
+            <View style={styles.profileDivider} />
+
+            <View style={styles.profileRow}>
+              <View style={styles.profileIconBox}>
+                <MaterialCommunityIcons name="baby-face-outline" size={20} color="#3B82F6" />
+              </View>
+              <Text style={styles.profileLabel}>Crianças ≤ 12 anos</Text>
+              <View style={[styles.profileBadge, { backgroundColor: '#3B82F614' }]}>
+                <Text style={[styles.profileBadgeText, { color: '#3B82F6' }]}>{criancas}</Text>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+      )}
     </View>
   );
 }

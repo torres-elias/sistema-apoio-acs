@@ -1,136 +1,177 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import COLORS from "../../constants/colors";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: '#F0F4F8',
   },
 
+  // Header
   header: {
     backgroundColor: COLORS.primary,
-    height: 88,
+    paddingTop: Platform.OS === 'ios' ? 50 : 32,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+  },
+  headerRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 28,
-    paddingHorizontal: 14,
+    alignItems: 'center',
+    marginBottom: 18,
   },
-
-  statsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: COLORS.white,
+  greeting: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 13,
   },
-
-  statBox: {
-    width: '50%',
-    padding: 15,
-    borderWidth: 0.5,
-    borderColor: '#e6e6e6',
+  userName: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '700',
+    marginTop: 2,
   },
-
-  statNumber: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: COLORS.text,
-  },
-
-  statLabel: {
-    fontSize: 12,
-    color: COLORS.greyDark,
-  },
-
-  sectionTitle: {
-    marginTop: 15,
-    marginLeft: 15,
-    fontWeight: 'bold',
-    color: COLORS.greyDark,
-  },
-
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  logoutButton: {
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderRadius: 12,
     padding: 10,
   },
 
-  card: {
-    width: '48%',
-    backgroundColor: COLORS.card,
-    margin: '1%',
-    padding: 18,
-    alignItems: 'center',
-    borderRadius: 8,
-    elevation: 2,
-  },
-
-  cardText: {
-    marginTop: 10,
-    color: COLORS.text,
-    textAlign: 'center',
-  },
-
-  profileBox: {
-    backgroundColor: COLORS.white,
-    margin: 10,
-    padding: 15,
-    borderRadius: 8,
-  },
-
-  logo: {
-    width: 40,
-    height: 40,
-    marginRight: 10,
-  },
-
-  logoutButton: {
-    backgroundColor: `${COLORS.white}22`,
-    borderRadius: 8,
-    padding: 6,
-  },
-
-  infoView: {
-    backgroundColor: COLORS.primary,
+  // Stats
+  statsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 8,
+    gap: 10,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
+  },
+  statNumber: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: '700',
+    lineHeight: 28,
+  },
+  statLabel: {
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 4,
+  },
+  statSub: {
+    color: 'rgba(255,255,255,0.5)',
+    fontSize: 10,
+    marginTop: 2,
   },
 
-  infoCard: {
-    backgroundColor: `${COLORS.white}22`,
+  // Loading
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Scroll
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 30,
+  },
+
+  // Section Title
+  sectionTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: COLORS.greyDark,
+    marginBottom: 10,
+    marginLeft: 4,
+    letterSpacing: 0.8,
+  },
+
+  // Quick Access
+  quickAccessRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 24,
+  },
+  quickCard: {
+    flex: 1,
+    backgroundColor: '#fff',
     borderRadius: 16,
-    alignItems: 'center',
+    padding: 18,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+  },
+  quickIconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: `${COLORS.primary}12`,
     justifyContent: 'center',
-    padding: 12,
-    margin: 8,
-    minWidth: 90,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  quickCardTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#1A202C',
+  },
+  quickCardSub: {
+    fontSize: 12,
+    color: COLORS.grey,
+    marginTop: 2,
   },
 
-  infoCardText: {
-    textAlign: 'center',
-    color: COLORS.white,
-  },
-
-  cardImage: {
-    width: 50,
-    height: 50,
-  },
-
-  profileCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 15,
-    borderBottomWidth: 0.5,
-    borderColor: '#eee',
-  },
-
-  profileCardNumber: {
-    borderRadius: 10,
-    paddingHorizontal: 8,
+  // Profile
+  profileBox: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
     paddingVertical: 4,
-    alignSelf: 'flex-start',
+    paddingHorizontal: 18,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+  },
+  profileRow: {
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 14,
+  },
+  profileIconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
     justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  profileLabel: {
+    flex: 1,
+    fontSize: 14,
+    color: '#1A202C',
+    fontWeight: '500',
+  },
+  profileBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 20,
+    minWidth: 36,
+    alignItems: 'center',
+  },
+  profileBadgeText: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  profileDivider: {
+    height: 1,
+    backgroundColor: '#F1F5F9',
   },
 });
 
