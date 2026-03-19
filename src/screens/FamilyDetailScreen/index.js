@@ -1,13 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, FlatList, Modal, ScrollView,
   TextInput, Alert, Platform, KeyboardAvoidingView
 } from 'react-native';
-import { Ionicons, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import * as familyController from '../../controllers/familyController';
+import * as visitController from '../../controllers/visitsController';
 import styles from './style';
 import COLORS from '../../constants/colors';
+
+const VISIT_TYPE_COLORS = {
+  'Rotina':      { bg: '#EFF6FF', text: '#2563EB' },
+  'Busca Ativa': { bg: '#F3E8FF', text: '#7C3AED' },
+  'Urgência':    { bg: '#FEE2E2', text: '#DC2626' },
+};
 
 export default function FamilyDetailScreen({ route, navigation }) {
   const { user } = useAuth();
@@ -16,6 +24,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
+  const [visits, setVisits] = useState([]);
 
   // Member form states
   const [nome, setNome] = useState('');
@@ -33,6 +42,14 @@ export default function FamilyDetailScreen({ route, navigation }) {
     loadFamily();
   }, []);
 
+  // Recarrega visitas toda vez que a tela ganhar foco
+  // (ex: ao voltar da tela NovaVisita)
+  useFocusEffect(
+    useCallback(() => {
+      loadVisits();
+    }, [familyId])
+  );
+
   async function loadFamily() {
     setLoading(true);
     try {
@@ -48,6 +65,15 @@ export default function FamilyDetailScreen({ route, navigation }) {
       Alert.alert('Erro', error.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function loadVisits() {
+    try {
+      const data = await visitController.getVisitsByFamily(familyId);
+      setVisits(data);
+    } catch (error) {
+      console.error('Erro ao carregar visitas:', error);
     }
   }
 
@@ -84,7 +110,6 @@ export default function FamilyDetailScreen({ route, navigation }) {
       Alert.alert('Atenção', 'Preencha nome e data de nascimento.');
       return;
     }
-
     const age = calculateAge(dataNascimento);
     if (age === null || age < 0 || age > 150) {
       Alert.alert('Atenção', 'Data de nascimento inválida. Use o formato DD/MM/AAAA.');
@@ -92,21 +117,15 @@ export default function FamilyDetailScreen({ route, navigation }) {
     }
 
     const member = {
-      nome,
-      dataNascimento,
-      sexo,
+      nome, dataNascimento, sexo,
       gestante: sexo === 'F' ? gestante : false,
       condicoes,
     };
 
     const currentMembers = family.membros || [];
-    let updatedMembers;
-
-    if (editingIndex !== null) {
-      updatedMembers = currentMembers.map((m, i) => i === editingIndex ? member : m);
-    } else {
-      updatedMembers = [...currentMembers, member];
-    }
+    const updatedMembers = editingIndex !== null
+      ? currentMembers.map((m, i) => i === editingIndex ? member : m)
+      : [...currentMembers, member];
 
     try {
       await familyController.updateFamily(familyId, { membros: updatedMembers });
@@ -146,6 +165,22 @@ export default function FamilyDetailScreen({ route, navigation }) {
     ]);
   }
 
+  async function handleDeleteVisit(visitId) {
+    Alert.alert('Remover', 'Deseja excluir esta visita?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Excluir', style: 'destructive', onPress: async () => {
+          try {
+            await visitController.deleteVisit(visitId);
+            setVisits(prev => prev.filter(v => v.id !== visitId));
+          } catch (error) {
+            Alert.alert('Erro', error.message);
+          }
+        }
+      }
+    ]);
+  }
+
   function closeModal() {
     setModalVisible(false);
     setEditingIndex(null);
@@ -154,6 +189,14 @@ export default function FamilyDetailScreen({ route, navigation }) {
     setSexo('M');
     setGestante(false);
     setCondicoes([]);
+  }
+
+  function navigateToNewVisit() {
+    navigation.navigate('NovaVisita', {
+      familyId,
+      familyName: family?.responsavel || '',
+      members: family?.membros || [],
+    });
   }
 
   if (loading || !family) {
@@ -165,6 +208,16 @@ export default function FamilyDetailScreen({ route, navigation }) {
   }
 
   const members = family.membros || [];
+
+  // Dados para o FlatList combinando membros + visitas em seções
+  const listSections = [
+    { type: 'membersHeader' },
+    ...members.map((m, i) => ({ type: 'member', item: m, index: i })),
+    ...(members.length === 0 ? [{ type: 'emptyMembers' }] : []),
+    { type: 'visitsHeader' },
+    ...visits.map(v => ({ type: 'visit', item: v })),
+    ...(visits.length === 0 ? [{ type: 'emptyVisits' }] : []),
+  ];
 
   return (
     <View style={styles.container}>
@@ -198,82 +251,160 @@ export default function FamilyDetailScreen({ route, navigation }) {
               <Text style={styles.metaValue}>{members.length}</Text>
             </View>
             <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Bairro</Text>
-              <Text style={styles.metaValue}>{family.bairro}</Text>
+              <Text style={styles.metaLabel}>Visitas</Text>
+              <Text style={styles.metaValue}>{visits.length}</Text>
             </View>
           </View>
         </View>
       </View>
 
-      {/* MEMBERS LIST */}
+      {/* FLAT LIST UNIFICADA */}
       <FlatList
-        data={members}
-        keyExtractor={(_, index) => index.toString()}
+        data={listSections}
+        keyExtractor={(item, index) => `${item.type}-${index}`}
         contentContainerStyle={styles.listContainer}
-        ListHeaderComponent={
-          <Text style={styles.sectionTitle}>MEMBROS ({members.length})</Text>
-        }
-        renderItem={({ item, index }) => {
-          const age = calculateAge(item.dataNascimento);
-          return (
-            <View style={styles.memberCard}>
-              <View style={[
-                styles.memberAvatar,
-                { backgroundColor: item.sexo === 'M' ? '#EFF6FF' : '#FDF2F8' }
-              ]}>
-                <Ionicons
-                  name={item.sexo === 'M' ? 'male' : 'female'}
-                  size={20}
-                  color={item.sexo === 'M' ? '#3B82F6' : '#EC4899'}
-                />
-              </View>
+        renderItem={({ item: row }) => {
+          // ── Cabeçalho de membros ──
+          if (row.type === 'membersHeader') {
+            return (
+              <Text style={styles.sectionTitle}>MEMBROS ({members.length})</Text>
+            );
+          }
 
-              <View style={styles.memberInfo}>
-                <Text style={styles.memberName}>{item.nome}</Text>
-                <View style={styles.memberDetails}>
-                  <Text style={styles.memberAge}>
-                    {age !== null ? `${age} anos` : ''}
-                  </Text>
-                  {item.gestante && (
-                    <Text style={styles.gestanteTag}>• Gestante</Text>
-                  )}
+          // ── Membro ──
+          if (row.type === 'member') {
+            const { item, index } = row;
+            const age = calculateAge(item.dataNascimento);
+            return (
+              <View style={styles.memberCard}>
+                <View style={[
+                  styles.memberAvatar,
+                  { backgroundColor: item.sexo === 'M' ? '#EFF6FF' : '#FDF2F8' }
+                ]}>
+                  <Ionicons
+                    name={item.sexo === 'M' ? 'male' : 'female'}
+                    size={20}
+                    color={item.sexo === 'M' ? '#3B82F6' : '#EC4899'}
+                  />
+                </View>
+                <View style={styles.memberInfo}>
+                  <Text style={styles.memberName}>{item.nome}</Text>
+                  <View style={styles.memberDetails}>
+                    <Text style={styles.memberAge}>
+                      {age !== null ? `${age} anos` : ''}
+                    </Text>
+                    {item.gestante && (
+                      <Text style={styles.gestanteTag}>• Gestante</Text>
+                    )}
+                  </View>
+                </View>
+                <View style={styles.memberTags}>
+                  {(item.condicoes || []).map(c => (
+                    <View key={c} style={[
+                      styles.conditionTag,
+                      { backgroundColor: c === 'hipertensao' ? '#FEE2E2' : '#FEF3C7' }
+                    ]}>
+                      <Text style={[
+                        styles.conditionTagText,
+                        { color: c === 'hipertensao' ? '#DC2626' : '#D97706' }
+                      ]}>
+                        {c === 'hipertensao' ? 'HAS' : 'DM'}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+                <View style={styles.memberActions}>
+                  <TouchableOpacity style={styles.memberActionBtn} onPress={() => handleEditMember(index)}>
+                    <Ionicons name="pencil" size={16} color={COLORS.primary} />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.memberActionBtn} onPress={() => handleRemoveMember(index)}>
+                    <Ionicons name="trash" size={16} color="#EF4444" />
+                  </TouchableOpacity>
                 </View>
               </View>
+            );
+          }
 
-              <View style={styles.memberTags}>
-                {(item.condicoes || []).map(c => (
-                  <View key={c} style={[
-                    styles.conditionTag,
-                    { backgroundColor: c === 'hipertensao' ? '#FEE2E2' : '#FEF3C7' }
-                  ]}>
-                    <Text style={[
-                      styles.conditionTagText,
-                      { color: c === 'hipertensao' ? '#DC2626' : '#D97706' }
-                    ]}>
-                      {c === 'hipertensao' ? 'HAS' : 'DM'}
+          // ── Empty membros ──
+          if (row.type === 'emptyMembers') {
+            return (
+              <View style={styles.emptyContainer}>
+                <Ionicons name="people-outline" size={40} color={COLORS.grey} />
+                <Text style={styles.emptyText}>Nenhum membro cadastrado</Text>
+                <Text style={styles.emptySubtext}>Toque no + para adicionar</Text>
+              </View>
+            );
+          }
+
+          // ── Cabeçalho de visitas ──
+          if (row.type === 'visitsHeader') {
+            return (
+              <View style={styles.visitsSectionHeader}>
+                <Text style={styles.sectionTitle}>VISITAS ({visits.length})</Text>
+                <TouchableOpacity style={styles.novaVisitaBtn} onPress={navigateToNewVisit}>
+                  <Ionicons name="add" size={16} color="#fff" />
+                  <Text style={styles.novaVisitaBtnText}>Nova Visita</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          }
+
+          // ── Card de visita ──
+          if (row.type === 'visit') {
+            const { item } = row;
+            const typeStyle = VISIT_TYPE_COLORS[item.tipoVisita] || VISIT_TYPE_COLORS['Rotina'];
+            return (
+              <View style={styles.visitCard}>
+                <View style={styles.visitCardLeft}>
+                  <View style={[styles.visitTypeBadge, { backgroundColor: typeStyle.bg }]}>
+                    <Text style={[styles.visitTypeBadgeText, { color: typeStyle.text }]}>
+                      {item.tipoVisita}
                     </Text>
                   </View>
-                ))}
+                  <Text style={styles.visitPaciente}>{item.paciente}</Text>
+                  <Text style={styles.visitMotivo} numberOfLines={1}>{item.motivo}</Text>
+                  <View style={styles.visitMeta}>
+                    <Ionicons name="calendar-outline" size={12} color={COLORS.grey} />
+                    <Text style={styles.visitMetaText}>{item.dataVisita}</Text>
+                    {!!item.pressao && (
+                      <>
+                        <Text style={styles.visitMetaDot}>•</Text>
+                        <FontAwesome5 name="heartbeat" size={11} color="#EF4444" />
+                        <Text style={styles.visitMetaText}>{item.pressao}</Text>
+                      </>
+                    )}
+                    {!!item.glicemia && (
+                      <>
+                        <Text style={styles.visitMetaDot}>•</Text>
+                        <FontAwesome5 name="tint" size={11} color="#F59E0B" />
+                        <Text style={styles.visitMetaText}>{item.glicemia}</Text>
+                      </>
+                    )}
+                  </View>
+                </View>
+                <TouchableOpacity
+                  style={styles.visitDeleteBtn}
+                  onPress={() => handleDeleteVisit(item.id)}
+                >
+                  <Ionicons name="trash-outline" size={18} color="#EF4444" />
+                </TouchableOpacity>
               </View>
+            );
+          }
 
-              <View style={styles.memberActions}>
-                <TouchableOpacity style={styles.memberActionBtn} onPress={() => handleEditMember(index)}>
-                  <Ionicons name="pencil" size={16} color={COLORS.primary} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.memberActionBtn} onPress={() => handleRemoveMember(index)}>
-                  <Ionicons name="trash" size={16} color="#EF4444" />
-                </TouchableOpacity>
+          // ── Empty visitas ──
+          if (row.type === 'emptyVisits') {
+            return (
+              <View style={[styles.emptyContainer, { marginTop: 8 }]}>
+                <Ionicons name="clipboard-outline" size={40} color={COLORS.grey} />
+                <Text style={styles.emptyText}>Nenhuma visita registrada</Text>
+                <Text style={styles.emptySubtext}>Toque em "Nova Visita" para adicionar</Text>
               </View>
-            </View>
-          );
+            );
+          }
+
+          return null;
         }}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="people-outline" size={48} color={COLORS.grey} />
-            <Text style={styles.emptyText}>Nenhum membro cadastrado</Text>
-            <Text style={styles.emptySubtext}>Toque no + para adicionar</Text>
-          </View>
-        }
       />
 
       {/* MEMBER FORM MODAL */}
@@ -293,7 +424,6 @@ export default function FamilyDetailScreen({ route, navigation }) {
           </View>
 
           <ScrollView contentContainerStyle={styles.formContainer}>
-            {/* Name */}
             <Text style={styles.formLabel}>NOME COMPLETO *</Text>
             <TextInput
               style={styles.formInput}
@@ -303,7 +433,6 @@ export default function FamilyDetailScreen({ route, navigation }) {
               placeholderTextColor={COLORS.grey}
             />
 
-            {/* Birth Date */}
             <Text style={styles.formLabel}>DATA DE NASCIMENTO *</Text>
             <TextInput
               style={styles.formInput}
@@ -315,7 +444,6 @@ export default function FamilyDetailScreen({ route, navigation }) {
               maxLength={10}
             />
 
-            {/* Sex */}
             <Text style={styles.formLabel}>SEXO</Text>
             <View style={styles.toggleRow}>
               <TouchableOpacity
@@ -338,7 +466,6 @@ export default function FamilyDetailScreen({ route, navigation }) {
               </TouchableOpacity>
             </View>
 
-            {/* Pregnant - only for female */}
             {sexo === 'F' && (
               <>
                 <Text style={styles.formLabel}>GESTANTE</Text>
@@ -359,7 +486,6 @@ export default function FamilyDetailScreen({ route, navigation }) {
               </>
             )}
 
-            {/* Conditions */}
             <Text style={styles.formLabel}>CONDIÇÕES DE SAÚDE</Text>
             <View style={styles.conditionsGrid}>
               {condicoesOptions.map(opt => {
@@ -383,7 +509,6 @@ export default function FamilyDetailScreen({ route, navigation }) {
               })}
             </View>
 
-            {/* Save */}
             <TouchableOpacity style={styles.saveButton} onPress={handleSaveMember}>
               <Text style={styles.saveButtonText}>
                 {editingIndex !== null ? 'SALVAR ALTERAÇÕES' : 'ADICIONAR MEMBRO'}
@@ -393,7 +518,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
         </KeyboardAvoidingView>
       </Modal>
 
-      {/* FAB */}
+      {/* FAB - Adicionar Membro */}
       <TouchableOpacity style={styles.fab} onPress={() => setModalVisible(true)}>
         <Ionicons name="person-add" size={24} color="#fff" />
       </TouchableOpacity>

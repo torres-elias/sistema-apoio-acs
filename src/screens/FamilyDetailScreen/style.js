@@ -7,15 +7,12 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#F0F4F8',
   },
-
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F0F4F8',
   },
-
-  // Header
   header: {
     backgroundColor: COLORS.primary,
     paddingTop: Platform.OS === 'ios' ? 50 : 32,
@@ -314,5 +311,83 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
+  },
+  visitsSectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 8,
+    marginBottom: 4,
+  },
+  novaVisitaBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#2f80c1',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+  },
+  novaVisitaBtnText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  visitCard: {
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    padding: 14,
+    marginBottom: 8,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.07,
+    shadowRadius: 3,
+  },
+  visitCardLeft: {
+    flex: 1,
+    gap: 4,
+  },
+  visitTypeBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginBottom: 2,
+  },
+  visitTypeBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+  },
+  visitPaciente: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#1F2937',
+  },
+  visitMotivo: {
+    fontSize: 13,
+    color: '#6B7280',
+  },
+  visitMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 4,
+    flexWrap: 'wrap',
+  },
+  visitMetaText: {
+    fontSize: 12,
+    color: '#9CA3AF',
+  },
+  visitMetaDot: {
+    fontSize: 12,
+    color: '#D1D5DB',
+  },
+  visitDeleteBtn: {
+    padding: 4,
+    marginLeft: 8,
   },
 });
