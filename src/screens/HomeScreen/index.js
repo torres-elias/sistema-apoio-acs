@@ -4,6 +4,7 @@ import { Ionicons, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-ico
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import * as familyController from '../../controllers/familyController';
+import * as visitController from '../../controllers/visitsController';
 import styles from './style';
 import COLORS from "../../constants/colors";
 
@@ -11,6 +12,7 @@ export default function HomeScreen({ navigation }) {
   const { user, signOut } = useAuth();
   const [families, setFamilies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visitsThisMonth, setVisitsThisMonth] = useState(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -23,6 +25,18 @@ export default function HomeScreen({ navigation }) {
     try {
       const data = await familyController.getFamilies(user.uid);
       setFamilies(data);
+ 
+      const allVisits = await visitController.getVisitsByAcs(user.uid);
+      const now = new Date();
+      const count = allVisits.filter(v => {
+        if (!v.dataVisita) return false;
+        const [dd, mm, yyyy] = v.dataVisita.split('/');
+        return (
+          parseInt(mm) === now.getMonth() + 1 &&
+          parseInt(yyyy) === now.getFullYear()
+        );
+      }).length;
+      setVisitsThisMonth(count);
     } catch (error) {
       Alert.alert('Erro', error.message);
     } finally {
@@ -53,9 +67,6 @@ export default function HomeScreen({ navigation }) {
     const age = Math.floor((Date.now() - birth.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
     return age >= 0 && age <= 12;
   }).length;
-
-  // TODO: visits count will come from visitService
-  const visitsThisMonth = 0;
 
   return (
     <View style={styles.container}>
