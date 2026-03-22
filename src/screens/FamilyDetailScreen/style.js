@@ -1,4 +1,3 @@
-
 import { StyleSheet, Platform } from "react-native";
 import COLORS from "../../constants/colors";
 
@@ -130,8 +129,6 @@ export default StyleSheet.create({
     fontWeight: '600',
     marginLeft: 6,
   },
-
-  // Condition Tags
   memberTags: {
     flexDirection: 'row',
     gap: 4,
@@ -146,8 +143,6 @@ export default StyleSheet.create({
     fontSize: 10,
     fontWeight: '600',
   },
-
-  // Member Actions
   memberActions: {
     gap: 4,
   },
@@ -175,143 +170,7 @@ export default StyleSheet.create({
     marginTop: 4,
   },
 
-  // Modal
-  modalContainer: {
-    flex: 1,
-    backgroundColor: '#F0F4F8',
-  },
-  modalHeader: {
-    backgroundColor: COLORS.primary,
-    paddingTop: Platform.OS === 'ios' ? 50 : 32,
-    paddingBottom: 18,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  modalHeaderTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '700',
-  },
-
-  // Form
-  formContainer: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  formLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: COLORS.greyDark,
-    marginBottom: 8,
-    marginTop: 16,
-    letterSpacing: 0.5,
-  },
-  formInput: {
-    backgroundColor: '#fff',
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    borderRadius: 12,
-    padding: 14,
-    fontSize: 15,
-    color: '#1A202C',
-  },
-
-  // Toggle Buttons
-  toggleRow: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  toggleBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 12,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#fff',
-  },
-  toggleBtnActiveM: {
-    backgroundColor: '#3B82F6',
-    borderColor: '#3B82F6',
-  },
-  toggleBtnActiveF: {
-    backgroundColor: '#EC4899',
-    borderColor: '#EC4899',
-  },
-  toggleBtnText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: COLORS.greyDark,
-  },
-  toggleBtnTextActive: {
-    color: '#fff',
-  },
-
-  // Conditions
-  conditionsGrid: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  conditionBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 14,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#fff',
-  },
-  conditionBtnText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: COLORS.greyDark,
-  },
-
-  // Save
-  saveButton: {
-    backgroundColor: COLORS.primary,
-    padding: 18,
-    borderRadius: 14,
-    alignItems: 'center',
-    marginTop: 28,
-    elevation: 4,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-  },
-  saveButtonText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 16,
-    letterSpacing: 0.5,
-  },
-
-  // FAB
-  fab: {
-    position: 'absolute',
-    right: 20,
-    bottom: 20,
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    backgroundColor: '#00C853',
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 6,
-    shadowColor: '#00C853',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-  },
+  // Visits section header
   visitsSectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -323,7 +182,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#2f80c1',
+    backgroundColor: COLORS.primary,
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 20,
@@ -333,6 +192,8 @@ export default StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
   },
+
+  // Visit Card
   visitCard: {
     backgroundColor: '#fff',
     borderRadius: 14,
@@ -389,5 +250,206 @@ export default StyleSheet.create({
   visitDeleteBtn: {
     padding: 4,
     marginLeft: 8,
+  },
+
+  // FAB
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: '#00C853',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 6,
+    shadowColor: '#00C853',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+  },
+
+  // ── Modal compartilhado (membro + visita) ────────────────────────
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#F0F4F8',
+  },
+  modalHeader: {
+    backgroundColor: COLORS.primary,
+    paddingTop: Platform.OS === 'ios' ? 50 : 32,
+    paddingBottom: 18,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  modalHeaderTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  modalHeaderSubtitle: {
+    color: 'rgba(255,255,255,0.75)',
+    fontSize: 13,
+    marginTop: 2,
+  },
+
+  // Form
+  formContainer: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  formLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: COLORS.greyDark,
+    marginBottom: 8,
+    marginTop: 16,
+    letterSpacing: 0.5,
+  },
+  formInput: {
+    backgroundColor: '#fff',
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    borderRadius: 12,
+    padding: 14,
+    fontSize: 15,
+    color: '#1A202C',
+    marginBottom: 4,
+  },
+
+  // Toggle (sexo / gestante)
+  toggleRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  toggleBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    backgroundColor: '#fff',
+  },
+  toggleBtnActiveM: {
+    backgroundColor: '#3B82F6',
+    borderColor: '#3B82F6',
+  },
+  toggleBtnActiveF: {
+    backgroundColor: '#EC4899',
+    borderColor: '#EC4899',
+  },
+  toggleBtnText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.greyDark,
+  },
+  toggleBtnTextActive: {
+    color: '#fff',
+  },
+
+  // Condições
+  conditionsGrid: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  conditionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    backgroundColor: '#fff',
+  },
+  conditionBtnText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.greyDark,
+  },
+
+  // Save
+  saveButton: {
+    backgroundColor: COLORS.primary,
+    padding: 18,
+    borderRadius: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 28,
+    elevation: 4,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+    letterSpacing: 0.5,
+  },
+
+  // ── Estilos específicos do modal de visita ───────────────────────
+  visitTipoRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 4,
+  },
+  visitTipoBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    backgroundColor: '#fff',
+  },
+  visitTipoBtnText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.greyDark,
+  },
+  visitMembroRow: {
+    flexDirection: 'row',
+    gap: 8,
+    paddingBottom: 2,
+    marginBottom: 4,
+  },
+  visitMembroChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1.5,
+    borderColor: COLORS.primary,
+    backgroundColor: `${COLORS.primary}12`,
+  },
+  visitMembroChipActive: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  visitMembroChipText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.primary,
+  },
+  visitVitaisRow: {
+    flexDirection: 'row',
+    marginBottom: 4,
   },
 });
