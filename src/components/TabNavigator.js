@@ -5,7 +5,6 @@ import HomeScreen from "../screens/HomeScreen";
 import FamiliesScreen from "../screens/FamiliesScreen";
 import FamilyFormScreen from "../screens/FamilyFormScreen";
 import FamilyDetailScreen from "../screens/FamilyDetailScreen";
-import NovaVisitaScreen from "../screens/NewVisitScreen/"; 
 import VisitsScreen from "../screens/VisitsScreen";
 import COLORS from "../constants/colors";
 
@@ -18,7 +17,6 @@ function FamiliesStackNavigator() {
       <FamiliesStack.Screen name="FamiliesList" component={FamiliesScreen} />
       <FamiliesStack.Screen name="FamilyDetail" component={FamilyDetailScreen} />
       <FamiliesStack.Screen name="FamilyForm" component={FamilyFormScreen} />
-      <FamiliesStack.Screen name="NovaVisita" component={NovaVisitaScreen} /> 
     </FamiliesStack.Navigator>
   );
 }
