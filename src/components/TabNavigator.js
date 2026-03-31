@@ -35,7 +35,6 @@ function FamiliesStackNavigator() {
       <FamiliesStack.Screen name="FamiliesList" component={FamiliesScreen} />
       <FamiliesStack.Screen name="FamilyDetail" component={FamilyDetailScreen} />
       <FamiliesStack.Screen name="FamilyForm" component={FamilyFormScreen} />
-      <FamiliesStack.Screen name="NovaVisita" component={NovaVisitaScreen} /> 
     </FamiliesStack.Navigator>
   );
 }
