@@ -7,7 +7,6 @@ import HomeScreen from "../screens/HomeScreen";
 import FamiliesScreen from "../screens/FamiliesScreen";
 import FamilyFormScreen from "../screens/FamilyFormScreen";
 import FamilyDetailScreen from "../screens/FamilyDetailScreen";
-import NovaVisitaScreen from "../screens/NewVisitScreen/"; 
 import VisitsScreen from "../screens/VisitsScreen";
 import AdminScreen from "../screens/AdminScreen";
 import UserFormScreen from "../screens/UserFormScreen";
@@ -32,12 +31,12 @@ function AdminStackNavigator() {
 
 function FamiliesStackNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="FamiliesList" component={FamiliesScreen} />
-      <Stack.Screen name="FamilyDetail" component={FamilyDetailScreen} />
-      <Stack.Screen name="FamilyForm" component={FamilyFormScreen} />
-      <Stack.Screen name="NovaVisita" component={NovaVisitaScreen} /> 
-    </Stack.Navigator>
+    <FamiliesStack.Navigator screenOptions={{ headerShown: false }}>
+      <FamiliesStack.Screen name="FamiliesList" component={FamiliesScreen} />
+      <FamiliesStack.Screen name="FamilyDetail" component={FamilyDetailScreen} />
+      <FamiliesStack.Screen name="FamilyForm" component={FamilyFormScreen} />
+      <FamiliesStack.Screen name="NovaVisita" component={NovaVisitaScreen} /> 
+    </FamiliesStack.Navigator>
   );
 }
 

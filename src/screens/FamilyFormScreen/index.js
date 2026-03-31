@@ -3,53 +3,60 @@ import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   Alert, ActivityIndicator, KeyboardAvoidingView, Platform
 } from 'react-native';
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import * as familyController from '../../controllers/familyController';
 import styles from './style';
 import COLORS from '../../constants/colors';
+
+//Constante estática fora do componente
+const TIPOS_MORADIA = [
+  'Casa', 'Prédio', 'Estúdio', 'Kitnet', 'Apartamento',
+  'Condomínio', 'Chácara', 'Sítio', 'Fazenda', 'República', 'Casa de Pensão',
+];
+
+const FORM_INICIAL = {
+  responsavel: '',
+  cep:         '',
+  logradouro:  '',
+  numero:      '',
+  bairro:      '',
+  tipoMoradia: 'Casa',
+};
 
 export default function FamilyFormScreen({ route, navigation }) {
   const { user } = useAuth();
   const familyId = route.params?.familyId || null;
   const isEditing = !!familyId;
 
-  const [loading, setLoading] = useState(false);
-  const [loadingCep, setLoadingCep] = useState(false);
+  //Estado da tela
+  const [form, setForm]               = useState(FORM_INICIAL);
+  const [loading, setLoading]         = useState(false);
+  const [loadingCep, setLoadingCep]   = useState(false);
   const [loadingData, setLoadingData] = useState(isEditing);
 
-  // Form states
-  const [responsavel, setResponsavel] = useState('');
-  const [cep, setCep] = useState('');
-  const [logradouro, setLogradouro] = useState('');
-  const [numero, setNumero] = useState('');
-  const [bairro, setBairro] = useState('');
-  const [tipoMoradia, setTipoMoradia] = useState('Casa');
+  function setField(field, value) {
+    setForm(prev => ({ ...prev, [field]: value }));
+  }
 
-  const tiposMoradia = [
-    'Casa', 'Prédio', 'Estúdio', 'Kitnet', 'Apartamento',
-    'Condomínio', 'Chácara', 'Sítio', 'Fazenda', 'República', 'Casa de Pensão'
-  ];
-
-  // Load existing data if editing
   useEffect(() => {
-    if (isEditing) {
-      loadFamily();
-    }
+    if (isEditing) loadFamily();
   }, []);
 
   async function loadFamily() {
     setLoadingData(true);
     try {
       const families = await familyController.getFamilies(user.uid);
-      const found = families.find(f => f.id === familyId);
+      const found    = families.find(f => f.id === familyId);
       if (found) {
-        setResponsavel(found.responsavel);
-        setCep(found.cep);
-        setLogradouro(found.logradouro);
-        setNumero(found.numero);
-        setBairro(found.bairro);
-        setTipoMoradia(found.tipoMoradia);
+        setForm({
+          responsavel: found.responsavel,
+          cep:         found.cep,
+          logradouro:  found.logradouro,
+          numero:      found.numero,
+          bairro:      found.bairro,
+          tipoMoradia: found.tipoMoradia,
+        });
       } else {
         Alert.alert('Erro', 'Família não encontrada.');
         navigation.goBack();
@@ -61,24 +68,26 @@ export default function FamilyFormScreen({ route, navigation }) {
     }
   }
 
-  // CEP auto-fill
   async function handleCepChange(value) {
-    const cleanedCep = value.replace(/\D/g, '');
-    setCep(cleanedCep);
+    const clean = value.replace(/\D/g, '');
+    setField('cep', clean);
 
-    if (cleanedCep.length === 8) {
+    if (clean.length === 8) {
       setLoadingCep(true);
       try {
-        const response = await fetch(`https://viacep.com.br/ws/${cleanedCep}/json/`);
-        const data = await response.json();
+        const res  = await fetch(`https://viacep.com.br/ws/${clean}/json/`);
+        const data = await res.json();
         if (data.erro) {
-          Alert.alert("Erro", "CEP não encontrado.");
+          Alert.alert('Erro', 'CEP não encontrado.');
         } else {
-          setLogradouro(data.logradouro || '');
-          setBairro(data.bairro || '');
+          setForm(prev => ({
+            ...prev,
+            logradouro: data.logradouro || '',
+            bairro:     data.bairro     || '',
+          }));
         }
-      } catch (error) {
-        Alert.alert("Erro", "Falha ao conectar ao serviço de CEP.");
+      } catch {
+        Alert.alert('Erro', 'Falha ao conectar ao serviço de CEP.');
       } finally {
         setLoadingCep(false);
       }
@@ -86,27 +95,18 @@ export default function FamilyFormScreen({ route, navigation }) {
   }
 
   async function handleSave() {
+    const { responsavel, logradouro, numero, bairro, cep } = form;
     if (!responsavel || !logradouro || !numero || !bairro || cep.length < 8) {
-      Alert.alert("Atenção", "Preencha todos os campos obrigatórios (*).");
+      Alert.alert('Atenção', 'Preencha todos os campos obrigatórios (*).');
       return;
     }
-
-    const familyData = {
-      responsavel,
-      cep,
-      logradouro,
-      numero,
-      bairro,
-      tipoMoradia,
-    };
-
     setLoading(true);
     try {
       if (isEditing) {
-        await familyController.updateFamily(familyId, familyData);
+        await familyController.updateFamily(familyId, form);
         Alert.alert('Sucesso', 'Família atualizada.');
       } else {
-        await familyController.createFamily(familyData, user.uid);
+        await familyController.createFamily(form, user.uid);
         Alert.alert('Sucesso', 'Família cadastrada.');
       }
       navigation.goBack();
@@ -141,13 +141,16 @@ export default function FamilyFormScreen({ route, navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      {/* FORM */}
-      <ScrollView contentContainerStyle={styles.formContainer}>
+      {/* FORMULÁRIO */}
+      <ScrollView
+        contentContainerStyle={styles.formContainer}
+        keyboardShouldPersistTaps="handled"
+      >
         <Text style={styles.formLabel}>RESPONSÁVEL FAMILIAR *</Text>
         <TextInput
           style={styles.formInput}
-          value={responsavel}
-          onChangeText={setResponsavel}
+          value={form.responsavel}
+          onChangeText={v => setField('responsavel', v)}
           placeholder="Ex: João Silva"
           placeholderTextColor={COLORS.grey}
         />
@@ -158,7 +161,7 @@ export default function FamilyFormScreen({ route, navigation }) {
             <View style={styles.formInputRow}>
               <TextInput
                 style={[styles.formInput, { flex: 1, marginBottom: 0 }]}
-                value={cep}
+                value={form.cep}
                 onChangeText={handleCepChange}
                 keyboardType="numeric"
                 maxLength={8}
@@ -174,8 +177,8 @@ export default function FamilyFormScreen({ route, navigation }) {
             <Text style={styles.formLabel}>NÚMERO *</Text>
             <TextInput
               style={styles.formInput}
-              value={numero}
-              onChangeText={setNumero}
+              value={form.numero}
+              onChangeText={v => setField('numero', v)}
               keyboardType="numeric"
               placeholderTextColor={COLORS.grey}
             />
@@ -185,8 +188,8 @@ export default function FamilyFormScreen({ route, navigation }) {
         <Text style={styles.formLabel}>LOGRADOURO *</Text>
         <TextInput
           style={[styles.formInput, loadingCep && styles.formInputDisabled]}
-          value={logradouro}
-          onChangeText={setLogradouro}
+          value={form.logradouro}
+          onChangeText={v => setField('logradouro', v)}
           editable={!loadingCep}
           placeholderTextColor={COLORS.grey}
         />
@@ -194,40 +197,45 @@ export default function FamilyFormScreen({ route, navigation }) {
         <Text style={styles.formLabel}>BAIRRO *</Text>
         <TextInput
           style={[styles.formInput, loadingCep && styles.formInputDisabled]}
-          value={bairro}
-          onChangeText={setBairro}
+          value={form.bairro}
+          onChangeText={v => setField('bairro', v)}
           editable={!loadingCep}
           placeholderTextColor={COLORS.grey}
         />
 
         <Text style={styles.formLabel}>TIPO DE MORADIA</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tipoScroll}>
-          {tiposMoradia.map(tipo => (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.tipoScroll}
+        >
+          {TIPOS_MORADIA.map(tipo => (
             <TouchableOpacity
               key={tipo}
-              style={[styles.tipoBtn, tipoMoradia === tipo && styles.tipoBtnActive]}
-              onPress={() => setTipoMoradia(tipo)}
+              style={[styles.tipoBtn, form.tipoMoradia === tipo && styles.tipoBtnActive]}
+              onPress={() => setField('tipoMoradia', tipo)}
             >
-              <Text style={[styles.tipoBtnText, tipoMoradia === tipo && styles.tipoBtnTextActive]}>
+              <Text style={[
+                styles.tipoBtnText,
+                form.tipoMoradia === tipo && styles.tipoBtnTextActive,
+              ]}>
                 {tipo}
               </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
 
-        {/* SAVE BUTTON */}
         <TouchableOpacity
           style={[styles.saveButton, loading && { opacity: 0.7 }]}
           onPress={handleSave}
           disabled={loading}
         >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.saveButtonText}>
-              {isEditing ? 'SALVAR ALTERAÇÕES' : 'CADASTRAR FAMÍLIA'}
-            </Text>
-          )}
+          {loading
+            ? <ActivityIndicator color="#fff" />
+            : <Text style={styles.saveButtonText}>
+                {isEditing ? 'SALVAR ALTERAÇÕES' : 'CADASTRAR FAMÍLIA'}
+              </Text>
+          }
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
