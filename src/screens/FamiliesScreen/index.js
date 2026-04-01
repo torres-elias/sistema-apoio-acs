@@ -3,18 +3,22 @@ import {
   View, Text, TextInput, TouchableOpacity, FlatList,
   Alert, ActivityIndicator
 } from 'react-native';
-import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import * as familyController from '../../controllers/familyController';
+import FamilyEditModal from './FamilyEditModal';
 import styles from './style';
 import COLORS from '../../constants/colors';
 
 export default function FamiliesScreen({ navigation }) {
   const { user } = useAuth();
-  const [families, setFamilies] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  //Estado da tela
+  const [families, setFamilies]     = useState([]);
+  const [loading, setLoading]       = useState(true);
   const [searchText, setSearchText] = useState('');
+  const [editingFamily, setEditingFamily] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -35,10 +39,10 @@ export default function FamiliesScreen({ navigation }) {
   }
 
   function handleRemove(id) {
-    Alert.alert("Remover", "Deseja excluir este registro de família?", [
-      { text: "Cancelar", style: "cancel" },
+    Alert.alert('Remover', 'Deseja excluir este registro de família?', [
+      { text: 'Cancelar', style: 'cancel' },
       {
-        text: "Excluir", style: "destructive", onPress: async () => {
+        text: 'Excluir', style: 'destructive', onPress: async () => {
           try {
             await familyController.deleteFamily(id);
             loadFamilies();
@@ -52,7 +56,7 @@ export default function FamiliesScreen({ navigation }) {
 
   const filteredFamilies = families.filter(f =>
     f.responsavel.toLowerCase().includes(searchText.toLowerCase()) ||
-    f.logradouro.toLowerCase().includes(searchText.toLowerCase()) ||
+    f.logradouro.toLowerCase().includes(searchText.toLowerCase())  ||
     f.bairro.toLowerCase().includes(searchText.toLowerCase())
   );
 
@@ -80,7 +84,7 @@ export default function FamiliesScreen({ navigation }) {
         </View>
       </View>
 
-      {/* LIST */}
+      {/* LISTA */}
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={COLORS.primary} />
@@ -92,7 +96,6 @@ export default function FamiliesScreen({ navigation }) {
           contentContainerStyle={styles.listContainer}
           renderItem={({ item, index }) => {
             const memberCount = item.membros?.length || 0;
-
             return (
               <TouchableOpacity
                 style={styles.familyCard}
@@ -128,7 +131,7 @@ export default function FamiliesScreen({ navigation }) {
                 <View style={styles.cardActions}>
                   <TouchableOpacity
                     style={styles.actionBtn}
-                    onPress={() => navigation.navigate('FamilyForm', { familyId: item.id })}
+                    onPress={() => setEditingFamily(item)}
                   >
                     <Ionicons name="pencil" size={18} color={COLORS.primary} />
                   </TouchableOpacity>
@@ -159,6 +162,17 @@ export default function FamiliesScreen({ navigation }) {
       >
         <Ionicons name="add" size={32} color="#fff" />
       </TouchableOpacity>
+
+      {/* MODAL DE EDIÇÃO */}
+      <FamilyEditModal
+        visible={editingFamily !== null}
+        editingFamily={editingFamily}
+        onClose={() => setEditingFamily(null)}
+        onSaved={() => {
+          setEditingFamily(null);
+          loadFamilies();
+        }}
+      />
     </View>
   );
 }
