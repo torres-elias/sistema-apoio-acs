@@ -13,19 +13,20 @@ import UserFormScreen from "../screens/UserFormScreen";
 import COLORS from "../constants/colors";
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+const AdminStack = createNativeStackNavigator();
+const FamiliesStack = createNativeStackNavigator();
 
 // Stack para a área administrativa
 function AdminStackNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ 
+    <AdminStack.Navigator screenOptions={{ 
       headerStyle: { backgroundColor: COLORS.primary },
       headerTintColor: COLORS.white,
       headerTitleStyle: { fontWeight: 'bold' }
     }}>
-      <Stack.Screen name="AdminHome" component={AdminScreen} options={{ title: 'Painel Administrativo' }} />
-      <Stack.Screen name="UserForm" component={UserFormScreen} options={{ title: 'Cadastrar Agente' }} />
-    </Stack.Navigator>
+      <AdminStack.Screen name="AdminHome" component={AdminScreen} options={{ title: 'Painel Administrativo' }} />
+      <AdminStack.Screen name="UserForm" component={UserFormScreen} options={{ title: 'Cadastrar Agente' }} />
+    </AdminStack.Navigator>
   );
 }
 
