@@ -1,10 +1,12 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, StatusBar } from "react-native";
 import COLORS from "../../constants/colors";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F0F4F8',
+    // Adicionado para evitar que o header cole no topo do Android
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   loadingContainer: {
     flex: 1,
@@ -14,7 +16,8 @@ export default StyleSheet.create({
   },
   header: {
     backgroundColor: COLORS.primary,
-    paddingTop: Platform.OS === 'ios' ? 50 : 32,
+    // Ajustado para manter consistência com o StatusBar
+    paddingTop: Platform.OS === 'ios' ? 50 : 20, 
     paddingBottom: 20,
     paddingHorizontal: 16,
   },
@@ -73,7 +76,8 @@ export default StyleSheet.create({
   // List
   listContainer: {
     padding: 14,
-    paddingBottom: 100,
+    // Aumentado para o conteúdo não ficar sob o FAB ou os botões do Android
+    paddingBottom: Platform.OS === 'android' ? 120 : 100,
   },
   sectionTitle: {
     fontSize: 13,
@@ -252,11 +256,12 @@ export default StyleSheet.create({
     marginLeft: 8,
   },
 
-  // FAB
+  // FAB (Botão flutuante de adicionar membro)
   fab: {
     position: 'absolute',
     right: 20,
-    bottom: 20,
+    // Aumentado o bottom para não colidir com a Tab Bar no Android
+    bottom: Platform.OS === 'android' ? 30 : 20,
     width: 56,
     height: 56,
     borderRadius: 16,
@@ -270,14 +275,15 @@ export default StyleSheet.create({
     shadowRadius: 8,
   },
 
-  // ── Modal compartilhado (membro + visita) ────────────────────────
+  // Modal compartilhado
   modalContainer: {
     flex: 1,
     backgroundColor: '#F0F4F8',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   modalHeader: {
     backgroundColor: COLORS.primary,
-    paddingTop: Platform.OS === 'ios' ? 50 : 32,
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
     paddingBottom: 18,
     paddingHorizontal: 16,
     flexDirection: 'row',
@@ -298,7 +304,8 @@ export default StyleSheet.create({
   // Form
   formContainer: {
     padding: 20,
-    paddingBottom: 40,
+    // Espaçamento extra no fim do formulário
+    paddingBottom: Platform.OS === 'android' ? 60 : 40,
   },
   formLabel: {
     fontSize: 12,
@@ -376,7 +383,7 @@ export default StyleSheet.create({
     color: COLORS.greyDark,
   },
 
-  // Save
+  // Save Button
   saveButton: {
     backgroundColor: COLORS.primary,
     padding: 18,
@@ -386,6 +393,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     marginTop: 28,
+    // Margem inferior maior para não ficar colado no fim da tela
+    marginBottom: Platform.OS === 'android' ? 40 : 20,
     elevation: 4,
     shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 4 },
@@ -399,7 +408,7 @@ export default StyleSheet.create({
     letterSpacing: 0.5,
   },
 
-  // ── Estilos específicos do modal de visita ───────────────────────
+  // Visitas Modal Específicos
   visitTipoRow: {
     flexDirection: 'row',
     gap: 8,

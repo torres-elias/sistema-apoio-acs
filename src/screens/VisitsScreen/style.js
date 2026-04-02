@@ -1,10 +1,15 @@
-import { StyleSheet, Platform } from "react-native";
-import COLORS  from "../../constants/colors";
+import { StyleSheet, Platform, StatusBar } from "react-native";
+import COLORS from "../../constants/colors";
+
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f4f4f4",
+    // Garante que o conteúdo não fique sob a barra de status no topo (Android)
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
+  
+  // Header Geral
   header: {
     backgroundColor: COLORS.primary,
     paddingTop: Platform.OS === 'ios' ? 50 : 20,
@@ -19,6 +24,8 @@ export default StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 15,
   },
+
+  // Busca
   searchSection: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -38,9 +45,13 @@ export default StyleSheet.create({
     fontSize: 16,
     color: "#333",
   },
+
+  // Listagem de Famílias
   listContainer: {
     paddingHorizontal: 15,
-    paddingBottom: 100,
+    // Aumentado para garantir que a última família da lista não fique 
+    // escondida atrás dos botões de navegação do Android
+    paddingBottom: Platform.OS === 'android' ? 120 : 100,
   },
   familyCard: {
     backgroundColor: "#fff",
@@ -82,6 +93,7 @@ export default StyleSheet.create({
     padding: 8,
   },
 
+  // Modal / Tela de Registro de Visita
   modalContainer: {
     flex: 1,
     backgroundColor: "#f4f4f4",
@@ -114,7 +126,9 @@ export default StyleSheet.create({
   },
   scrollContentVisita: {
     padding: 20,
-    paddingBottom: 40,
+    // Espaçamento extra no fim do formulário para o botão de salvar 
+    // subir o suficiente para não ser bloqueado pelos botões do Android
+    paddingBottom: Platform.OS === 'android' ? 60 : 40,
   },
   cardVisita: {
     backgroundColor: '#fff',
@@ -156,6 +170,8 @@ export default StyleSheet.create({
     fontSize: 15,
     color: '#333',
   },
+
+  // Radio Buttons (Sim/Não)
   radioGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -183,13 +199,16 @@ export default StyleSheet.create({
   radioTextActive: {
     color: '#2f80c1',
   },
+
+  // Botão Salvar
   saveButton: {
     backgroundColor: '#2f80c1',
     padding: 18,
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 40,
+    // Margem inferior extra para evitar colisão com a barra de navegação
+    marginBottom: Platform.OS === 'android' ? 50 : 40,
   },
   saveButtonText: {
     color: '#fff',

@@ -1,16 +1,19 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, StatusBar } from "react-native";
 import COLORS from "../../constants/colors";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F0F4F8',
+    // Adicionado para evitar que o header colida com o topo no Android
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 
   // Header
   header: {
     backgroundColor: COLORS.primary,
-    paddingTop: Platform.OS === 'ios' ? 50 : 32,
+    // Ajustado para manter a proporção com o StatusBar
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
     paddingBottom: 18,
     paddingHorizontal: 16,
   },
@@ -59,7 +62,8 @@ export default StyleSheet.create({
   // List
   listContainer: {
     padding: 12,
-    paddingBottom: 100,
+    // Aumentado para garantir que o último card não fique sob a Tab Bar ou botões do sistema
+    paddingBottom: Platform.OS === 'android' ? 120 : 100,
   },
 
   // Family Card
@@ -162,7 +166,8 @@ export default StyleSheet.create({
   fab: {
     position: 'absolute',
     right: 20,
-    bottom: 20,
+    // Ajustado para não colidir com os botões de navegação do Android
+    bottom: Platform.OS === 'android' ? 30 : 20,
     width: 56,
     height: 56,
     borderRadius: 16,
@@ -180,10 +185,12 @@ export default StyleSheet.create({
   modalContainer: {
     flex: 1,
     backgroundColor: '#F0F4F8',
+    // Safe area no topo do modal para Android
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   modalHeader: {
     backgroundColor: COLORS.primary,
-    paddingTop: Platform.OS === 'ios' ? 50 : 32,
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
     paddingBottom: 18,
     paddingHorizontal: 16,
     flexDirection: 'row',
@@ -196,10 +203,11 @@ export default StyleSheet.create({
     fontWeight: '700',
   },
 
-  // Form (reutilizado pelo modal)
+  // Form
   formContainer: {
     padding: 20,
-    paddingBottom: 40,
+    // Garante que o final do formulário seja acessível
+    paddingBottom: Platform.OS === 'android' ? 60 : 40,
   },
   formLabel: {
     fontSize: 12,
@@ -259,6 +267,8 @@ export default StyleSheet.create({
     borderRadius: 14,
     alignItems: 'center',
     marginTop: 24,
+    // Margem inferior para o botão de salvar não colar no fim da tela
+    marginBottom: Platform.OS === 'android' ? 40 : 20,
     elevation: 4,
     shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 4 },

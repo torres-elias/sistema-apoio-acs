@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
+import { Platform } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 
 import HomeScreen from "../screens/HomeScreen";
@@ -58,7 +59,21 @@ export default function TabNavigator() {
         },
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.grey,
-        tabBarStyle: { height: 60, paddingBottom: 10 }
+        tabBarStyle: {
+          height: Platform.OS === 'android' ? 100 : 60, 
+          // O paddingBottom garante que o ícone e o texto subam um pouco
+          paddingBottom: Platform.OS === 'android' ? 40 : 10,
+          paddingTop: 8,
+          backgroundColor: '#fff',
+          borderTopWidth: 1,
+          borderTopColor: '#eee',
+          elevation: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '500',
+          marginBottom: Platform.OS === 'android' ? 4 : 0,
+        }
       })}
     >
       <Tab.Screen name="Dashboard" component={HomeScreen} />
