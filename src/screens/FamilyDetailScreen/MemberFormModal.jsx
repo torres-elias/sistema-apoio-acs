@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Modal, View, Text, TextInput, TouchableOpacity,
   ScrollView, KeyboardAvoidingView, Platform, Alert
@@ -6,10 +6,11 @@ import {
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import styles from './style';
 import COLORS from '../../constants/colors';
+import { formatDateInput, calculateAge } from '../../utils/formatters';
 
 const CONDICOES_OPTIONS = [
-  { key: 'hipertensao', label: 'Hipertensão', icon: 'heartbeat', color: '#EF4444' },
-  { key: 'diabetes',    label: 'Diabetes',    icon: 'tint',      color: '#F59E0B' },
+  { key: 'hipertensao', label: 'Hipertensão', icon: 'heartbeat', color: COLORS.danger  },
+  { key: 'diabetes',    label: 'Diabetes',    icon: 'tint',      color: COLORS.warning },
 ];
 
 const FORM_INICIAL = {
@@ -19,21 +20,6 @@ const FORM_INICIAL = {
   gestante:       false,
   condicoes:      [],
 };
-
-function formatDateInput(value) {
-  const cleaned = value.replace(/\D/g, '');
-  if (cleaned.length <= 2) return cleaned;
-  if (cleaned.length <= 4) return `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
-  return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}/${cleaned.slice(4, 8)}`;
-}
-
-function calculateAge(dateString) {
-  if (!dateString) return null;
-  const parts = dateString.split('/');
-  if (parts.length !== 3) return null;
-  const birth = new Date(parts[2], parts[1] - 1, parts[0]);
-  return Math.floor((Date.now() - birth.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-}
 
 export default function MemberFormModal({ visible, editingMember, onClose, onSave }) {
   const [form, setForm] = useState(FORM_INICIAL);
@@ -107,7 +93,7 @@ export default function MemberFormModal({ visible, editingMember, onClose, onSav
         {/* Header */}
         <View style={styles.modalHeader}>
           <TouchableOpacity onPress={onClose}>
-            <Ionicons name="close" size={26} color="#fff" />
+            <Ionicons name="close" size={26} color={COLORS.surface} />
           </TouchableOpacity>
           <Text style={styles.modalHeaderTitle}>
             {editingMember ? 'Editar Membro' : 'Novo Membro'}
@@ -148,7 +134,7 @@ export default function MemberFormModal({ visible, editingMember, onClose, onSav
               style={[styles.toggleBtn, form.sexo === 'M' && styles.toggleBtnActiveM]}
               onPress={() => handleSexoChange('M')}
             >
-              <Ionicons name="male" size={18} color={form.sexo === 'M' ? '#fff' : '#3B82F6'} />
+              <Ionicons name="male" size={18} color={form.sexo === 'M' ? COLORS.surface : COLORS.male} />
               <Text style={[styles.toggleBtnText, form.sexo === 'M' && styles.toggleBtnTextActive]}>
                 Masculino
               </Text>
@@ -157,7 +143,7 @@ export default function MemberFormModal({ visible, editingMember, onClose, onSav
               style={[styles.toggleBtn, form.sexo === 'F' && styles.toggleBtnActiveF]}
               onPress={() => handleSexoChange('F')}
             >
-              <Ionicons name="female" size={18} color={form.sexo === 'F' ? '#fff' : '#EC4899'} />
+              <Ionicons name="female" size={18} color={form.sexo === 'F' ? COLORS.surface : COLORS.female} />
               <Text style={[styles.toggleBtnText, form.sexo === 'F' && styles.toggleBtnTextActive]}>
                 Feminino
               </Text>
@@ -170,7 +156,7 @@ export default function MemberFormModal({ visible, editingMember, onClose, onSav
               <Text style={styles.formLabel}>GESTANTE</Text>
               <View style={styles.toggleRow}>
                 <TouchableOpacity
-                  style={[styles.toggleBtn, form.gestante && { backgroundColor: '#EC4899', borderColor: '#EC4899' }]}
+                  style={[styles.toggleBtn, form.gestante && { backgroundColor: COLORS.female, borderColor: COLORS.female }]}
                   onPress={() => setField('gestante', true)}
                 >
                   <Text style={[styles.toggleBtnText, form.gestante && styles.toggleBtnTextActive]}>Sim</Text>
@@ -202,9 +188,9 @@ export default function MemberFormModal({ visible, editingMember, onClose, onSav
                   <FontAwesome5
                     name={opt.icon}
                     size={16}
-                    color={selected ? '#fff' : opt.color}
+                    color={selected ? COLORS.surface : opt.color}
                   />
-                  <Text style={[styles.conditionBtnText, selected && { color: '#fff' }]}>
+                  <Text style={[styles.conditionBtnText, selected && { color: COLORS.surface }]}>
                     {opt.label}
                   </Text>
                 </TouchableOpacity>

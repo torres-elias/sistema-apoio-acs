@@ -4,7 +4,7 @@ import COLORS from "../../constants/colors";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F4F8',
+    backgroundColor: COLORS.pageBackground,
   },
 
   // Header
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   userName: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 20,
     fontWeight: '700',
     marginTop: 2,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.08)',
   },
   statNumber: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 24,
     fontWeight: '700',
     lineHeight: 28,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   quickCard: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 16,
     padding: 18,
     elevation: 2,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   quickCardTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1A202C',
+    color: COLORS.text,
   },
   quickCardSub: {
     fontSize: 12,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
 
   // Profile
   profileBox: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 16,
     paddingVertical: 4,
     paddingHorizontal: 18,
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   profileLabel: {
     flex: 1,
     fontSize: 14,
-    color: '#1A202C',
+    color: COLORS.text,
     fontWeight: '500',
   },
   profileBadge: {
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   profileDivider: {
     height: 1,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.inputBackground,
   },
 });
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   Alert, KeyboardAvoidingView, Platform
@@ -8,14 +8,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import * as visitController from '../../controllers/visitsController';
 import styles from './style';
 import COLORS from '../../constants/colors';
+import { formatDateInput, todayString } from '../../utils/formatters';
+import { VISIT_TYPES } from '../../constants/appConstants';
 
- 
-const tiposDeVisita = [
-  { key: 'Rotina', label: 'Rotina', icon: 'calendar-outline', color: COLORS.primary },
-  { key: 'Busca Ativa', label: 'Busca Ativa', icon: 'search', color: '#7C3AED' },
-  { key: 'Urgência', label: 'Urgência', icon: 'alert-circle', color: COLORS.danger },
-];
- 
 export default function NewVisitScreen({ route, navigation }) {
   const { user } = useAuth();
   const { familyId, familyName, members = [] } = route.params;
@@ -26,29 +21,11 @@ export default function NewVisitScreen({ route, navigation }) {
   const [pressao, setPressao] = useState('');
   const [glicemia, setGlicemia] = useState('');
   const [observacoes, setObservacoes] = useState('');
-  const [dataVisita, setDataVisita] = useState('');
+  const [dataVisita, setDataVisita] = useState(todayString);
   const [saving, setSaving] = useState(false);
- 
-  // Preenche data de hoje automaticamente
-  useEffect(() => {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = today.getFullYear();
-    setDataVisita(`${dd}/${mm}/${yyyy}`);
-  }, []);
- 
-  function formatDateInput(value) {
-    const cleaned = value.replace(/\D/g, '');
-    if (cleaned.length <= 2) return cleaned;
-    if (cleaned.length <= 4) return `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
-    return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}/${cleaned.slice(4, 8)}`;
-  }
- 
+
   // Monta lista de opções de membros: "Família" + nomes individuais
   const membroOptions = ['Família', ...members.map(m => m.nome)];
- 
-  const selectedTipo = tiposDeVisita.find(t => t.key === tipoVisita);
  
   async function handleSave() {
     if (!motivo.trim()) {
@@ -90,7 +67,7 @@ export default function NewVisitScreen({ route, navigation }) {
       {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
+          <Ionicons name="arrow-back" size={24} color={COLORS.surface} />
         </TouchableOpacity>
         <View style={styles.headerText}>
           <Text style={styles.headerTitle}>Nova Visita</Text>
@@ -109,7 +86,7 @@ export default function NewVisitScreen({ route, navigation }) {
         <View style={styles.card}>
           <Text style={styles.sectionLabel}>TIPO DE VISITA</Text>
           <View style={styles.tipoRow}>
-            {tiposDeVisita.map(tipo => {
+            {VISIT_TYPES.map(tipo => {
               const active = tipoVisita === tipo.key;
               return (
                 <TouchableOpacity
@@ -123,9 +100,9 @@ export default function NewVisitScreen({ route, navigation }) {
                   <Ionicons
                     name={tipo.icon}
                     size={14}
-                    color={active ? '#fff' : tipo.color}
+                    color={active ? COLORS.surface : tipo.color}
                   />
-                  <Text style={[styles.tipoBtnText, active && { color: '#fff' }]}>
+                  <Text style={[styles.tipoBtnText, active && { color: COLORS.surface }]}>
                     {tipo.label}
                   </Text>
                 </TouchableOpacity>
@@ -150,9 +127,9 @@ export default function NewVisitScreen({ route, navigation }) {
                     <Ionicons
                       name={nome === 'Família' ? 'people' : 'person'}
                       size={13}
-                      color={active ? '#fff' : COLORS.primary}
+                      color={active ? COLORS.surface : COLORS.primary}
                     />
-                    <Text style={[styles.membroChipText, active && { color: '#fff' }]}>
+                    <Text style={[styles.membroChipText, active && { color: COLORS.surface }]}>
                       {nome}
                     </Text>
                   </TouchableOpacity>
@@ -244,7 +221,7 @@ export default function NewVisitScreen({ route, navigation }) {
           onPress={handleSave}
           disabled={saving}
         >
-          <Ionicons name="checkmark-circle" size={20} color="#fff" />
+          <Ionicons name="checkmark-circle" size={20} color={COLORS.surface} />
           <Text style={styles.saveButtonText}>
             {saving ? 'SALVANDO...' : 'SALVAR VISITA'}
           </Text>

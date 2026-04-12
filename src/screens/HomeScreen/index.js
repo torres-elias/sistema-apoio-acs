@@ -25,12 +25,12 @@ export default function HomeScreen({ navigation }) {
     try {
       const data = await familyController.getFamilies(user.uid);
       setFamilies(data);
- 
+
       const allVisits = await visitController.getVisitsByAcs(user.uid);
       const now = new Date();
       const count = allVisits.filter(v => {
         if (!v.dataVisita) return false;
-        const [dd, mm, yyyy] = v.dataVisita.split('/');
+        const [, mm, yyyy] = v.dataVisita.split('/');
         return (
           parseInt(mm) === now.getMonth() + 1 &&
           parseInt(yyyy) === now.getFullYear()
@@ -53,8 +53,11 @@ export default function HomeScreen({ navigation }) {
   }
 
   // Calculate stats from families data
+  const currentMonthLabel = new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
+    .replace(/^\w/, c => c.toUpperCase());
+
   const totalFamilies = families.length;
-  const totalMembers = families.reduce((acc, f) => acc + 1 + (f.membros?.length || 0), 0);
+  const totalMembers = families.reduce((acc, f) => acc + (f.membros?.length || 0), 0);
   const allMembers = families.flatMap(f => f.membros || []);
   const hipertensos = allMembers.filter(m => m.condicoes?.includes('hipertensao')).length;
   const diabeticos = allMembers.filter(m => m.condicoes?.includes('diabetes')).length;
@@ -78,7 +81,7 @@ export default function HomeScreen({ navigation }) {
             <Text style={styles.userName}>{user?.displayName || user?.email?.split('@')[0]}</Text>
           </View>
           <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-            <Ionicons name="log-out-outline" size={24} color="#fff" />
+            <Ionicons name="log-out-outline" size={24} color={COLORS.surface} />
           </TouchableOpacity>
         </View>
 
@@ -97,7 +100,7 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.statCard}>
             <Text style={styles.statNumber}>{visitsThisMonth}</Text>
             <Text style={styles.statLabel}>Visitas/Mês</Text>
-            <Text style={styles.statSub}>Março 2026</Text>
+            <Text style={styles.statSub}>{currentMonthLabel}</Text>
           </View>
         </View>
       </View>
@@ -139,11 +142,11 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.profileBox}>
             <View style={styles.profileRow}>
               <View style={styles.profileIconBox}>
-                <FontAwesome5 name="heartbeat" size={18} color="#EF4444" />
+                <FontAwesome5 name="heartbeat" size={18} color={COLORS.danger} />
               </View>
               <Text style={styles.profileLabel}>Hipertensos</Text>
-              <View style={[styles.profileBadge, { backgroundColor: '#EF444414' }]}>
-                <Text style={[styles.profileBadgeText, { color: '#EF4444' }]}>{hipertensos}</Text>
+              <View style={[styles.profileBadge, { backgroundColor: COLORS.danger + '14' }]}>
+                <Text style={[styles.profileBadgeText, { color: COLORS.danger }]}>{hipertensos}</Text>
               </View>
             </View>
 
@@ -151,11 +154,11 @@ export default function HomeScreen({ navigation }) {
 
             <View style={styles.profileRow}>
               <View style={styles.profileIconBox}>
-                <MaterialCommunityIcons name="water" size={20} color="#F59E0B" />
+                <MaterialCommunityIcons name="water" size={20} color={COLORS.warning} />
               </View>
               <Text style={styles.profileLabel}>Diabéticos</Text>
-              <View style={[styles.profileBadge, { backgroundColor: '#F59E0B14' }]}>
-                <Text style={[styles.profileBadgeText, { color: '#F59E0B' }]}>{diabeticos}</Text>
+              <View style={[styles.profileBadge, { backgroundColor: COLORS.warning + '14' }]}>
+                <Text style={[styles.profileBadgeText, { color: COLORS.warning }]}>{diabeticos}</Text>
               </View>
             </View>
 
@@ -163,11 +166,11 @@ export default function HomeScreen({ navigation }) {
 
             <View style={styles.profileRow}>
               <View style={styles.profileIconBox}>
-                <MaterialCommunityIcons name="human-pregnant" size={20} color="#EC4899" />
+                <MaterialCommunityIcons name="human-pregnant" size={20} color={COLORS.female} />
               </View>
               <Text style={styles.profileLabel}>Gestantes</Text>
-              <View style={[styles.profileBadge, { backgroundColor: '#EC489914' }]}>
-                <Text style={[styles.profileBadgeText, { color: '#EC4899' }]}>{gestantes}</Text>
+              <View style={[styles.profileBadge, { backgroundColor: COLORS.female + '14' }]}>
+                <Text style={[styles.profileBadgeText, { color: COLORS.female }]}>{gestantes}</Text>
               </View>
             </View>
 
@@ -175,11 +178,11 @@ export default function HomeScreen({ navigation }) {
 
             <View style={styles.profileRow}>
               <View style={styles.profileIconBox}>
-                <MaterialCommunityIcons name="baby-face-outline" size={20} color="#3B82F6" />
+                <MaterialCommunityIcons name="baby-face-outline" size={20} color={COLORS.male} />
               </View>
               <Text style={styles.profileLabel}>Crianças ≤ 12 anos</Text>
-              <View style={[styles.profileBadge, { backgroundColor: '#3B82F614' }]}>
-                <Text style={[styles.profileBadgeText, { color: '#3B82F6' }]}>{criancas}</Text>
+              <View style={[styles.profileBadge, { backgroundColor: COLORS.male + '14' }]}>
+                <Text style={[styles.profileBadgeText, { color: COLORS.male }]}>{criancas}</Text>
               </View>
             </View>
           </View>

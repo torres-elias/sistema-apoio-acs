@@ -4,11 +4,11 @@ import COLORS from "../../constants/colors";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: COLORS.background,
     // Garante que o conteúdo não fique sob a barra de status no topo (Android)
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
-  
+
   // Header Geral
   header: {
     backgroundColor: COLORS.primary,
@@ -19,7 +19,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   headerTitle: {
-    color: "#fff",
+    color: COLORS.surface,
     fontSize: 20,
     fontWeight: "bold",
     marginLeft: 15,
@@ -29,7 +29,7 @@ export default StyleSheet.create({
   searchSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     margin: 15,
     borderRadius: 8,
     paddingHorizontal: 12,
@@ -43,18 +43,18 @@ export default StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     fontSize: 16,
-    color: "#333",
+    color: COLORS.text,
   },
 
   // Listagem de Famílias
   listContainer: {
     paddingHorizontal: 15,
-    // Aumentado para garantir que a última família da lista não fique 
+    // Aumentado para garantir que a última família da lista não fique
     // escondida atrás dos botões de navegação do Android
     paddingBottom: Platform.OS === 'android' ? 120 : 100,
   },
   familyCard: {
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.surface,
     borderRadius: 10,
     padding: 15,
     marginBottom: 12,
@@ -76,17 +76,17 @@ export default StyleSheet.create({
   responsibleName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: COLORS.text,
   },
   addressText: {
     fontSize: 13,
-    color: "#666",
+    color: COLORS.textLight,
     marginTop: 3,
   },
   actionButtons: {
     flexDirection: 'row',
     borderLeftWidth: 1,
-    borderLeftColor: '#eee',
+    borderLeftColor: COLORS.border,
     paddingLeft: 5,
   },
   iconBtn: {
@@ -96,10 +96,10 @@ export default StyleSheet.create({
   // Modal / Tela de Registro de Visita
   modalContainer: {
     flex: 1,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: COLORS.background,
   },
   headerVisita: {
-    backgroundColor: '#2f80c1',
+    backgroundColor: COLORS.accentBlue,
     paddingTop: Platform.OS === 'ios' ? 50 : 20,
     paddingBottom: 24,
     borderBottomLeftRadius: 20,
@@ -116,22 +116,22 @@ export default StyleSheet.create({
   titleVisita: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#fff',
+    color: COLORS.surface,
   },
   subtitleVisita: {
     fontSize: 14,
-    color: '#fff',
+    color: COLORS.surface,
     opacity: 0.8,
     marginTop: 2,
   },
   scrollContentVisita: {
     padding: 20,
-    // Espaçamento extra no fim do formulário para o botão de salvar 
+    // Espaçamento extra no fim do formulário para o botão de salvar
     // subir o suficiente para não ser bloqueado pelos botões do Android
     paddingBottom: Platform.OS === 'android' ? 60 : 40,
   },
   cardVisita: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 20,
     padding: 20,
     elevation: 3,
@@ -145,7 +145,7 @@ export default StyleSheet.create({
   labelVisita: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#8A94A6',
+    color: COLORS.grey,
     marginBottom: 8,
     textTransform: 'uppercase',
   },
@@ -153,22 +153,22 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 12,
     paddingHorizontal: 14,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: COLORS.border,
     height: 52,
   },
   inputInnerVisita: {
     flex: 1,
     fontSize: 15,
-    color: '#333',
+    color: COLORS.text,
     height: '100%',
   },
   inputTextVisita: {
     fontSize: 15,
-    color: '#333',
+    color: COLORS.text,
   },
 
   // Radio Buttons (Sim/Não)
@@ -184,25 +184,25 @@ export default StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
   },
   radioButtonActive: {
-    borderColor: '#2f80c1',
-    backgroundColor: '#2f80c115', 
+    borderColor: COLORS.accentBlue,
+    backgroundColor: COLORS.accentBlue + '15',
   },
   radioText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#666',
+    color: COLORS.textLight,
   },
   radioTextActive: {
-    color: '#2f80c1',
+    color: COLORS.accentBlue,
   },
 
   // Botão Salvar
   saveButton: {
-    backgroundColor: '#2f80c1',
+    backgroundColor: COLORS.accentBlue,
     padding: 18,
     borderRadius: 10,
     alignItems: 'center',
@@ -211,7 +211,7 @@ export default StyleSheet.create({
     marginBottom: Platform.OS === 'android' ? 50 : 40,
   },
   saveButtonText: {
-    color: '#fff',
+    color: COLORS.surface,
     fontWeight: 'bold',
     fontSize: 16,
   },

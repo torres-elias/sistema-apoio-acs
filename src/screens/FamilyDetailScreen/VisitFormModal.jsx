@@ -1,33 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Modal, View, Text, TextInput, TouchableOpacity,
   ScrollView, KeyboardAvoidingView, Platform, Alert, ActivityIndicator
 } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import * as visitController from '../../controllers/visitsController';
 import styles from './style';
 import COLORS from '../../constants/colors';
-
-const TIPOS_DE_VISITA = [
-  { key: 'Rotina',      label: 'Rotina',      icon: 'calendar-outline', color: COLORS.primary },
-  { key: 'Busca Ativa', label: 'Busca Ativa', icon: 'search',           color: '#7C3AED'      },
-  { key: 'Urgência',    label: 'Urgência',    icon: 'alert-circle',     color: '#DC2626'      },
-];
-
-function formatDateInput(value) {
-  const cleaned = value.replace(/\D/g, '');
-  if (cleaned.length <= 2) return cleaned;
-  if (cleaned.length <= 4) return `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
-  return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}/${cleaned.slice(4, 8)}`;
-}
-
-function todayString() {
-  const today = new Date();
-  const dd    = String(today.getDate()).padStart(2, '0');
-  const mm    = String(today.getMonth() + 1).padStart(2, '0');
-  const yyyy  = today.getFullYear();
-  return `${dd}/${mm}/${yyyy}`;
-}
+import { formatDateInput, todayString } from '../../utils/formatters';
+import { VISIT_TYPES } from '../../constants/appConstants';
 
 export default function VisitFormModal({
   visible, familyId, familyName, members, userId, onClose, onSaved,
@@ -103,10 +84,9 @@ export default function VisitFormModal({
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.modalContainer}
       >
-        {/* Header */}
         <View style={styles.modalHeader}>
           <TouchableOpacity onPress={onClose}>
-            <Ionicons name="close" size={26} color="#fff" />
+            <Ionicons name="close" size={26} color={COLORS.surface} />
           </TouchableOpacity>
           <View style={{ flex: 1, marginLeft: 12 }}>
             <Text style={styles.modalHeaderTitle}>Nova Visita</Text>
@@ -121,10 +101,9 @@ export default function VisitFormModal({
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Tipo de visita */}
           <Text style={styles.formLabel}>TIPO DE VISITA</Text>
           <View style={styles.visitTipoRow}>
-            {TIPOS_DE_VISITA.map(tipo => {
+            {VISIT_TYPES.map(tipo => {
               const active = form.tipo === tipo.key;
               return (
                 <TouchableOpacity
@@ -135,8 +114,8 @@ export default function VisitFormModal({
                   ]}
                   onPress={() => setField('tipo', tipo.key)}
                 >
-                  <Ionicons name={tipo.icon} size={14} color={active ? '#fff' : tipo.color} />
-                  <Text style={[styles.visitTipoBtnText, active && { color: '#fff' }]}>
+                  <Ionicons name={tipo.icon} size={14} color={active ? COLORS.surface : tipo.color} />
+                  <Text style={[styles.visitTipoBtnText, active && { color: COLORS.surface }]}>
                     {tipo.label}
                   </Text>
                 </TouchableOpacity>
@@ -144,7 +123,6 @@ export default function VisitFormModal({
             })}
           </View>
 
-          {/* Membro visitado */}
           <Text style={styles.formLabel}>MEMBRO VISITADO</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.visitMembroRow}>
@@ -159,9 +137,9 @@ export default function VisitFormModal({
                     <Ionicons
                       name={nome === 'Família' ? 'people' : 'person'}
                       size={13}
-                      color={active ? '#fff' : COLORS.primary}
+                      color={active ? COLORS.surface : COLORS.primary}
                     />
-                    <Text style={[styles.visitMembroChipText, active && { color: '#fff' }]}>
+                    <Text style={[styles.visitMembroChipText, active && { color: COLORS.surface }]}>
                       {nome}
                     </Text>
                   </TouchableOpacity>
@@ -170,7 +148,6 @@ export default function VisitFormModal({
             </View>
           </ScrollView>
 
-          {/* Motivo */}
           <Text style={styles.formLabel}>MOTIVO *</Text>
           <TextInput
             style={styles.formInput}
@@ -181,7 +158,6 @@ export default function VisitFormModal({
             multiline
           />
 
-          {/* Data */}
           <Text style={styles.formLabel}>DATA DA VISITA</Text>
           <TextInput
             style={styles.formInput}
@@ -193,7 +169,6 @@ export default function VisitFormModal({
             maxLength={10}
           />
 
-          {/* Sinais vitais */}
           <Text style={styles.formLabel}>SINAIS VITAIS (opcional)</Text>
           <View style={styles.visitVitaisRow}>
             <View style={{ flex: 1 }}>
@@ -219,7 +194,6 @@ export default function VisitFormModal({
             </View>
           </View>
 
-          {/* Observações */}
           <Text style={styles.formLabel}>OBSERVAÇÕES</Text>
           <TextInput
             style={[styles.formInput, { height: 90, textAlignVertical: 'top' }]}
@@ -231,16 +205,15 @@ export default function VisitFormModal({
             numberOfLines={4}
           />
 
-          {/* Salvar */}
           <TouchableOpacity
             style={[styles.saveButton, saving && { opacity: 0.7 }]}
             onPress={handleSave}
             disabled={saving}
           >
             {saving
-              ? <ActivityIndicator color="#fff" />
+              ? <ActivityIndicator color={COLORS.surface} />
               : <>
-                  <Ionicons name="checkmark-circle" size={20} color="#fff" />
+                  <Ionicons name="checkmark-circle" size={20} color={COLORS.surface} />
                   <Text style={styles.saveButtonText}>SALVAR VISITA</Text>
                 </>
             }

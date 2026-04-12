@@ -7,11 +7,11 @@ import { db, firebaseConfig } from '../config/firebase';
 
 export const registerNewUser = async (email, password, nome, cargo) => {
   const appName = "SecondaryApp";
-  
+
   // Agora firebaseConfig não será mais undefined
-  const secondaryApp = getApps().find(a => a.name === appName) 
+  const secondaryApp = getApps().find(a => a.name === appName)
     || initializeApp(firebaseConfig, appName);
-  
+
   const secondaryAuth = getAuth(secondaryApp);
 
   try {
@@ -29,7 +29,7 @@ export const registerNewUser = async (email, password, nome, cargo) => {
 
     // 3. Limpa a sessão secundária imediatamente
     await signOut(secondaryAuth);
-    
+
     return { success: true };
   } catch (error) {
     // Se o erro for 'auth/email-already-in-use', você saberá que o usuário já existe

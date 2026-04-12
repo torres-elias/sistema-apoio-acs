@@ -8,6 +8,7 @@ import { getVisitsByAcs, deleteVisit } from '../../controllers/visitsController'
 import { auth } from '../../config/firebase';
 import VisitEditModal from './VisitEditModal';
 import styles from './style';
+import COLORS from '../../constants/colors';
 
 export default function VisitasScreen({ navigation }) {
   //Estado da tela 
@@ -58,14 +59,14 @@ export default function VisitasScreen({ navigation }) {
       {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={28} color="#fff" />
+          <Ionicons name="arrow-back" size={28} color={COLORS.surface} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Visitas Realizadas</Text>
       </View>
 
       {/* BUSCA */}
       <View style={styles.searchSection}>
-        <Ionicons name="search" size={20} color="#999" />
+        <Ionicons name="search" size={20} color={COLORS.grey} />
         <TextInput
           style={styles.searchInput}
           placeholder="Buscar por paciente ou motivo..."
@@ -82,8 +83,8 @@ export default function VisitasScreen({ navigation }) {
         renderItem={({ item }) => (
           <View style={styles.familyCard}>
             <View style={styles.cardInfo}>
-              <View style={[styles.iconContainer, { backgroundColor: '#e8f4fd' }]}>
-                <FontAwesome5 name="clipboard-list" size={18} color="#2f80c1" />
+              <View style={[styles.iconContainer, { backgroundColor: COLORS.accentBlueLight }]}>
+                <FontAwesome5 name="clipboard-list" size={18} color={COLORS.accentBlue} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.responsibleName}>{item.paciente}</Text>
@@ -97,19 +98,19 @@ export default function VisitasScreen({ navigation }) {
                 style={styles.iconBtn}
                 onPress={() => setEditingVisit(item)}
               >
-                <Ionicons name="pencil" size={20} color="#2f80c1" />
+                <Ionicons name="pencil" size={20} color={COLORS.accentBlue} />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.iconBtn}
                 onPress={() => handleRemove(item.id)}
               >
-                <Ionicons name="trash" size={20} color="#ff3c3c" />
+                <Ionicons name="trash" size={20} color={COLORS.danger} />
               </TouchableOpacity>
             </View>
           </View>
         )}
         ListEmptyComponent={
-          <Text style={{ textAlign: 'center', marginTop: 30, color: '#999' }}>
+          <Text style={{ textAlign: 'center', marginTop: 30, color: COLORS.grey }}>
             Nenhuma visita registrada.
           </Text>
         }

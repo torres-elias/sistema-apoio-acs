@@ -4,7 +4,7 @@ import COLORS from '../../constants/colors';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.inputBackground,
   },
   header: {
     backgroundColor: COLORS.primary,
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: COLORS.surface,
   },
   headerSubtitle: {
     fontSize: 13,
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   saveButtonText: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 15,
     fontWeight: '700',
     letterSpacing: 0.5,

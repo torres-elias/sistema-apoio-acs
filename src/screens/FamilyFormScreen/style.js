@@ -4,14 +4,14 @@ import COLORS from "../../constants/colors";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F4F8',
+    backgroundColor: COLORS.pageBackground,
   },
 
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F0F4F8',
+    backgroundColor: COLORS.pageBackground,
   },
 
   // Header
@@ -25,7 +25,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerTitle: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 18,
     fontWeight: '700',
   },
@@ -44,17 +44,17 @@ export default StyleSheet.create({
     letterSpacing: 0.5,
   },
   formInput: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     borderRadius: 12,
     padding: 14,
     fontSize: 15,
-    color: '#1A202C',
+    color: COLORS.text,
     marginBottom: 4,
   },
   formInputDisabled: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.inputBackground,
   },
   formRow: {
     flexDirection: 'row',
@@ -76,7 +76,7 @@ export default StyleSheet.create({
     borderColor: COLORS.primary,
     borderRadius: 20,
     marginRight: 8,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
   },
   tipoBtnActive: {
     backgroundColor: COLORS.primary,
@@ -87,7 +87,7 @@ export default StyleSheet.create({
     fontSize: 13,
   },
   tipoBtnTextActive: {
-    color: '#fff',
+    color: COLORS.surface,
   },
 
   // Save Button
@@ -104,7 +104,7 @@ export default StyleSheet.create({
     shadowRadius: 8,
   },
   saveButtonText: {
-    color: '#fff',
+    color: COLORS.surface,
     fontWeight: '700',
     fontSize: 16,
     letterSpacing: 0.5,

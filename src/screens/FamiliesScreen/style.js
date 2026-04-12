@@ -4,7 +4,7 @@ import COLORS from "../../constants/colors";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F4F8',
+    backgroundColor: COLORS.pageBackground,
     // Adicionado para evitar que o header colida com o topo no Android
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
@@ -23,7 +23,7 @@ export default StyleSheet.create({
     marginBottom: 14,
   },
   headerTitle: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 19,
     fontWeight: '700',
     marginLeft: 12,
@@ -49,7 +49,7 @@ export default StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 10,
     fontSize: 14,
-    color: '#fff',
+    color: COLORS.surface,
   },
 
   // Loading
@@ -68,7 +68,7 @@ export default StyleSheet.create({
 
   // Family Card
   familyCard: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 16,
     padding: 16,
     marginBottom: 8,
@@ -90,7 +90,7 @@ export default StyleSheet.create({
     marginRight: 14,
   },
   cardNumberText: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -100,7 +100,7 @@ export default StyleSheet.create({
   responsibleName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1A202C',
+    color: COLORS.text,
     marginBottom: 4,
   },
   addressRow: {
@@ -141,7 +141,7 @@ export default StyleSheet.create({
   actionBtn: {
     padding: 8,
     borderRadius: 10,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.sectionBackground,
   },
 
   // Empty
@@ -171,11 +171,11 @@ export default StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 16,
-    backgroundColor: '#00C853',
+    backgroundColor: COLORS.fab,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 6,
-    shadowColor: '#00C853',
+    shadowColor: COLORS.fab,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -184,7 +184,7 @@ export default StyleSheet.create({
   // ── Modal de Edição ──────────────────────────────────────────────
   modalContainer: {
     flex: 1,
-    backgroundColor: '#F0F4F8',
+    backgroundColor: COLORS.pageBackground,
     // Safe area no topo do modal para Android
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
@@ -198,7 +198,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   modalHeaderTitle: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 18,
     fontWeight: '700',
   },
@@ -218,17 +218,17 @@ export default StyleSheet.create({
     letterSpacing: 0.5,
   },
   formInput: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     borderRadius: 12,
     padding: 14,
     fontSize: 15,
-    color: '#1A202C',
+    color: COLORS.text,
     marginBottom: 4,
   },
   formInputDisabled: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: COLORS.inputBackground,
   },
   formRow: {
     flexDirection: 'row',
@@ -248,7 +248,7 @@ export default StyleSheet.create({
     borderColor: COLORS.primary,
     borderRadius: 20,
     marginRight: 8,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
   },
   tipoBtnActive: {
     backgroundColor: COLORS.primary,
@@ -259,7 +259,7 @@ export default StyleSheet.create({
     fontSize: 13,
   },
   tipoBtnTextActive: {
-    color: '#fff',
+    color: COLORS.surface,
   },
   saveButton: {
     backgroundColor: COLORS.primary,
@@ -276,7 +276,7 @@ export default StyleSheet.create({
     shadowRadius: 8,
   },
   saveButtonText: {
-    color: '#fff',
+    color: COLORS.surface,
     fontWeight: '700',
     fontSize: 16,
     letterSpacing: 0.5,

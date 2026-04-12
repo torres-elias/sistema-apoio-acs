@@ -64,9 +64,9 @@ export default function TabNavigator() {
           // O paddingBottom garante que o ícone e o texto subam um pouco
           paddingBottom: Platform.OS === 'android' ? 40 : 10,
           paddingTop: 8,
-          backgroundColor: '#fff',
+          backgroundColor: COLORS.surface,
           borderTopWidth: 1,
-          borderTopColor: '#eee',
+          borderTopColor: COLORS.border,
           elevation: 8,
         },
         tabBarLabelStyle: {

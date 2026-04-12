@@ -11,20 +11,8 @@ import MemberFormModal from './MemberFormModal';
 import VisitFormModal from './VisitFormModal';
 import styles from './style';
 import COLORS from '../../constants/colors';
-
-const VISIT_TYPE_COLORS = {
-  'Rotina':      { bg: '#EFF6FF', text: '#2563EB' },
-  'Busca Ativa': { bg: '#F3E8FF', text: '#7C3AED' },
-  'Urgência':    { bg: '#FEE2E2', text: '#DC2626' },
-};
-
-function calculateAge(dateString) {
-  if (!dateString) return null;
-  const parts = dateString.split('/');
-  if (parts.length !== 3) return null;
-  const birth = new Date(parts[2], parts[1] - 1, parts[0]);
-  return Math.floor((Date.now() - birth.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-}
+import { calculateAge } from '../../utils/formatters';
+import { VISIT_TYPE_COLORS } from '../../constants/appConstants';
 
 export default function FamilyDetailScreen({ route, navigation }) {
   const { user } = useAuth();
@@ -35,7 +23,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
   const [visits, setVisits]   = useState([]);
   const [loading, setLoading] = useState(true);
 
-  //Controle dos modais 
+  //Controle dos modais
   const [memberModal, setMemberModal]     = useState(null);
   const [visitModalOpen, setVisitModalOpen] = useState(false);
 
@@ -55,7 +43,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
         navigation.goBack();
         return;
       }
-      const visitsData = await visitController.getVisitsByFamily(familyId);
+      const visitsData = await visitController.getVisitsByFamily(familyId, user.uid);
       setFamily(found);
       setVisits(visitsData);
     } catch (error) {
@@ -117,7 +105,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
 
   async function reloadVisits() {
     try {
-      const data = await visitController.getVisitsByFamily(familyId);
+      const data = await visitController.getVisitsByFamily(familyId, user.uid);
       setVisits(data);
     } catch (error) {
       Alert.alert('Erro', error.message);
@@ -155,12 +143,12 @@ export default function FamilyDetailScreen({ route, navigation }) {
         <View style={styles.memberCard}>
           <View style={[
             styles.memberAvatar,
-            { backgroundColor: item.sexo === 'M' ? '#EFF6FF' : '#FDF2F8' }
+            { backgroundColor: item.sexo === 'M' ? COLORS.lightBlue : COLORS.lightPink }
           ]}>
             <Ionicons
               name={item.sexo === 'M' ? 'male' : 'female'}
               size={20}
-              color={item.sexo === 'M' ? '#3B82F6' : '#EC4899'}
+              color={item.sexo === 'M' ? COLORS.male : COLORS.female}
             />
           </View>
 
@@ -176,11 +164,11 @@ export default function FamilyDetailScreen({ route, navigation }) {
             {(item.condicoes || []).map(c => (
               <View key={c} style={[
                 styles.conditionTag,
-                { backgroundColor: c === 'hipertensao' ? '#FEE2E2' : '#FEF3C7' }
+                { backgroundColor: c === 'hipertensao' ? COLORS.dangerLight : COLORS.warningLight }
               ]}>
                 <Text style={[
                   styles.conditionTagText,
-                  { color: c === 'hipertensao' ? '#DC2626' : '#D97706' }
+                  { color: c === 'hipertensao' ? COLORS.dangerDark : COLORS.warningDark }
                 ]}>
                   {c === 'hipertensao' ? 'HAS' : 'DM'}
                 </Text>
@@ -199,7 +187,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
               style={styles.memberActionBtn}
               onPress={() => handleRemoveMember(item)}
             >
-              <Ionicons name="trash" size={16} color="#EF4444" />
+              <Ionicons name="trash" size={16} color={COLORS.danger} />
             </TouchableOpacity>
           </View>
         </View>
@@ -224,7 +212,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
             style={styles.novaVisitaBtn}
             onPress={() => setVisitModalOpen(true)}
           >
-            <Ionicons name="add" size={16} color="#fff" />
+            <Ionicons name="add" size={16} color={COLORS.surface} />
             <Text style={styles.novaVisitaBtnText}>Nova Visita</Text>
           </TouchableOpacity>
         </View>
@@ -250,14 +238,14 @@ export default function FamilyDetailScreen({ route, navigation }) {
               {!!item.pressao && (
                 <>
                   <Text style={styles.visitMetaDot}>•</Text>
-                  <FontAwesome5 name="heartbeat" size={11} color="#EF4444" />
+                  <FontAwesome5 name="heartbeat" size={11} color={COLORS.danger} />
                   <Text style={styles.visitMetaText}>{item.pressao}</Text>
                 </>
               )}
               {!!item.glicemia && (
                 <>
                   <Text style={styles.visitMetaDot}>•</Text>
-                  <FontAwesome5 name="tint" size={11} color="#F59E0B" />
+                  <FontAwesome5 name="tint" size={11} color={COLORS.warning} />
                   <Text style={styles.visitMetaText}>{item.glicemia}</Text>
                 </>
               )}
@@ -267,7 +255,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
             style={styles.visitDeleteBtn}
             onPress={() => handleDeleteVisit(item.id)}
           >
-            <Ionicons name="trash-outline" size={18} color="#EF4444" />
+            <Ionicons name="trash-outline" size={18} color={COLORS.danger} />
           </TouchableOpacity>
         </View>
       );
@@ -292,7 +280,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
+            <Ionicons name="arrow-back" size={24} color={COLORS.surface} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Família</Text>
           <View style={{ width: 24 }} />
@@ -337,7 +325,7 @@ export default function FamilyDetailScreen({ route, navigation }) {
         style={styles.fab}
         onPress={() => setMemberModal('new')}
       >
-        <Ionicons name="person-add" size={24} color="#fff" />
+        <Ionicons name="person-add" size={24} color={COLORS.surface} />
       </TouchableOpacity>
 
       {/* MODAIS */}

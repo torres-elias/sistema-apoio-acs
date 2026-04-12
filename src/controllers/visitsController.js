@@ -7,8 +7,8 @@ async function createVisit(data, acsUid) {
   return await visitService.createVisit(data, acsUid);
 }
 
-async function getVisitsByFamily(familyId) {
-  const visits = await visitService.getVisitsByFamily(familyId);
+async function getVisitsByFamily(familyId, acsUid) {
+  const visits = await visitService.getVisitsByFamily(familyId, acsUid);
   // Ordena pela data mais recente
   return visits.sort((a, b) => {
     const toMs = (d) => {

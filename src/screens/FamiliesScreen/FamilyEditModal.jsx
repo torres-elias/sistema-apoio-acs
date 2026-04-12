@@ -7,11 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as familyController from '../../controllers/familyController';
 import styles from './style';
 import COLORS from '../../constants/colors';
-
-const TIPOS_MORADIA = [
-  'Casa', 'Prédio', 'Estúdio', 'Kitnet', 'Apartamento',
-  'Condomínio', 'Chácara', 'Sítio', 'Fazenda', 'República', 'Casa de Pensão',
-];
+import { TIPOS_MORADIA } from '../../constants/appConstants';
 
 const FORM_INICIAL = {
   responsavel: '',
@@ -101,7 +97,7 @@ export default function FamilyEditModal({ visible, editingFamily, onClose, onSav
         {/* Header */}
         <View style={styles.modalHeader}>
           <TouchableOpacity onPress={onClose}>
-            <Ionicons name="close" size={24} color="#fff" />
+            <Ionicons name="close" size={24} color={COLORS.surface} />
           </TouchableOpacity>
           <Text style={styles.modalHeaderTitle}>Editar Família</Text>
           <View style={{ width: 24 }} />
@@ -202,7 +198,7 @@ export default function FamilyEditModal({ visible, editingFamily, onClose, onSav
             disabled={saving}
           >
             {saving
-              ? <ActivityIndicator color="#fff" />
+              ? <ActivityIndicator color={COLORS.surface} />
               : <Text style={styles.saveButtonText}>SALVAR ALTERAÇÕES</Text>
             }
           </TouchableOpacity>

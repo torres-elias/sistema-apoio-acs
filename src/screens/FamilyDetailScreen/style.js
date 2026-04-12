@@ -4,7 +4,7 @@ import COLORS from "../../constants/colors";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F4F8',
+    backgroundColor: COLORS.pageBackground,
     // Adicionado para evitar que o header cole no topo do Android
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
@@ -12,12 +12,12 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F0F4F8',
+    backgroundColor: COLORS.pageBackground,
   },
   header: {
     backgroundColor: COLORS.primary,
     // Ajustado para manter consistência com o StatusBar
-    paddingTop: Platform.OS === 'ios' ? 50 : 20, 
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
     paddingBottom: 20,
     paddingHorizontal: 16,
   },
@@ -28,7 +28,7 @@ export default StyleSheet.create({
     marginBottom: 16,
   },
   headerTitle: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 19,
     fontWeight: '700',
   },
@@ -47,7 +47,7 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
   },
   familyName: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 17,
     fontWeight: '700',
   },
@@ -67,7 +67,7 @@ export default StyleSheet.create({
     fontSize: 11,
   },
   metaValue: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 13,
     fontWeight: '600',
     marginTop: 2,
@@ -90,7 +90,7 @@ export default StyleSheet.create({
 
   // Member Card
   memberCard: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 16,
     padding: 14,
     marginBottom: 8,
@@ -116,7 +116,7 @@ export default StyleSheet.create({
   memberName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1A202C',
+    color: COLORS.text,
   },
   memberDetails: {
     flexDirection: 'row',
@@ -129,7 +129,7 @@ export default StyleSheet.create({
   },
   gestanteTag: {
     fontSize: 12,
-    color: '#EC4899',
+    color: COLORS.female,
     fontWeight: '600',
     marginLeft: 6,
   },
@@ -153,7 +153,7 @@ export default StyleSheet.create({
   memberActionBtn: {
     padding: 6,
     borderRadius: 8,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: COLORS.sectionBackground,
   },
 
   // Empty
@@ -192,14 +192,14 @@ export default StyleSheet.create({
     borderRadius: 20,
   },
   novaVisitaBtnText: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 13,
     fontWeight: '600',
   },
 
   // Visit Card
   visitCard: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 14,
     padding: 14,
     marginBottom: 8,
@@ -230,11 +230,11 @@ export default StyleSheet.create({
   visitPaciente: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: COLORS.text,
   },
   visitMotivo: {
     fontSize: 13,
-    color: '#6B7280',
+    color: COLORS.textLight,
   },
   visitMeta: {
     flexDirection: 'row',
@@ -245,11 +245,11 @@ export default StyleSheet.create({
   },
   visitMetaText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: COLORS.grey,
   },
   visitMetaDot: {
     fontSize: 12,
-    color: '#D1D5DB',
+    color: COLORS.border,
   },
   visitDeleteBtn: {
     padding: 4,
@@ -265,11 +265,11 @@ export default StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 16,
-    backgroundColor: '#00C853',
+    backgroundColor: COLORS.fab,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 6,
-    shadowColor: '#00C853',
+    shadowColor: COLORS.fab,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -278,7 +278,7 @@ export default StyleSheet.create({
   // Modal compartilhado
   modalContainer: {
     flex: 1,
-    backgroundColor: '#F0F4F8',
+    backgroundColor: COLORS.pageBackground,
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   modalHeader: {
@@ -291,7 +291,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   modalHeaderTitle: {
-    color: '#fff',
+    color: COLORS.surface,
     fontSize: 18,
     fontWeight: '700',
   },
@@ -316,13 +316,13 @@ export default StyleSheet.create({
     letterSpacing: 0.5,
   },
   formInput: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.border,
     borderRadius: 12,
     padding: 14,
     fontSize: 15,
-    color: '#1A202C',
+    color: COLORS.text,
     marginBottom: 4,
   },
 
@@ -340,16 +340,16 @@ export default StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#fff',
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
   },
   toggleBtnActiveM: {
-    backgroundColor: '#3B82F6',
-    borderColor: '#3B82F6',
+    backgroundColor: COLORS.male,
+    borderColor: COLORS.male,
   },
   toggleBtnActiveF: {
-    backgroundColor: '#EC4899',
-    borderColor: '#EC4899',
+    backgroundColor: COLORS.female,
+    borderColor: COLORS.female,
   },
   toggleBtnText: {
     fontSize: 14,
@@ -357,7 +357,7 @@ export default StyleSheet.create({
     color: COLORS.greyDark,
   },
   toggleBtnTextActive: {
-    color: '#fff',
+    color: COLORS.surface,
   },
 
   // Condições
@@ -374,8 +374,8 @@ export default StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#fff',
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
   },
   conditionBtnText: {
     fontSize: 14,
@@ -402,7 +402,7 @@ export default StyleSheet.create({
     shadowRadius: 8,
   },
   saveButtonText: {
-    color: '#fff',
+    color: COLORS.surface,
     fontWeight: '700',
     fontSize: 16,
     letterSpacing: 0.5,
@@ -423,8 +423,8 @@ export default StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#fff',
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
   },
   visitTipoBtnText: {
     fontSize: 12,

@@ -6,8 +6,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { updateVisit } from '../../controllers/visitsController';
 import styles from './style';
-
-const TIPOS_DE_VISITA = ['Rotina', 'Busca Ativa', 'Urgência'];
+import COLORS from '../../constants/colors';
+import { VISIT_TYPES } from '../../constants/appConstants';
 
 export default function VisitEditModal({ visible, editingVisit, onClose, onSaved }) {
   const [form, setForm] = useState({
@@ -58,7 +58,7 @@ export default function VisitEditModal({ visible, editingVisit, onClose, onSaved
         <View style={styles.headerVisita}>
           <View style={styles.headerContentVisita}>
             <TouchableOpacity style={styles.backButtonVisita} onPress={onClose}>
-              <Ionicons name="chevron-back" size={28} color="#fff" />
+              <Ionicons name="chevron-back" size={28} color={COLORS.surface} />
             </TouchableOpacity>
             <View>
               <Text style={styles.titleVisita}>Editar Visita</Text>
@@ -77,20 +77,20 @@ export default function VisitEditModal({ visible, editingVisit, onClose, onSaved
             <View style={styles.inputGroupVisita}>
               <Text style={styles.labelVisita}>TIPO DE VISITA</Text>
               <View style={styles.radioGroup}>
-                {TIPOS_DE_VISITA.map(tipo => (
+                {VISIT_TYPES.map(({ key, label }) => (
                   <TouchableOpacity
-                    key={tipo}
+                    key={key}
                     style={[
                       styles.radioButton,
-                      form.tipoVisita === tipo && styles.radioButtonActive,
+                      form.tipoVisita === key && styles.radioButtonActive,
                     ]}
-                    onPress={() => setField('tipoVisita', tipo)}
+                    onPress={() => setField('tipoVisita', key)}
                   >
                     <Text style={[
                       styles.radioText,
-                      form.tipoVisita === tipo && styles.radioTextActive,
+                      form.tipoVisita === key && styles.radioTextActive,
                     ]}>
-                      {tipo}
+                      {label}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -100,8 +100,8 @@ export default function VisitEditModal({ visible, editingVisit, onClose, onSaved
             {/* Paciente */}
             <View style={styles.inputGroupVisita}>
               <Text style={styles.labelVisita}>PACIENTE</Text>
-              <View style={[styles.inputContainerVisita, { backgroundColor: '#f0f0f0' }]}>
-                <Text style={[styles.inputTextVisita, { color: '#999' }]}>
+              <View style={[styles.inputContainerVisita, { backgroundColor: COLORS.card }]}>
+                <Text style={[styles.inputTextVisita, { color: COLORS.grey }]}>
                   {editingVisit?.paciente}
                 </Text>
               </View>
@@ -114,7 +114,7 @@ export default function VisitEditModal({ visible, editingVisit, onClose, onSaved
                 <TextInput
                   style={styles.inputInnerVisita}
                   placeholder="Ex: Acompanhamento mensal"
-                  placeholderTextColor="#999"
+                  placeholderTextColor={COLORS.grey}
                   value={form.motivo}
                   onChangeText={v => setField('motivo', v)}
                 />
@@ -128,7 +128,7 @@ export default function VisitEditModal({ visible, editingVisit, onClose, onSaved
                 <TextInput
                   style={styles.inputInnerVisita}
                   placeholder="Ex: 120/80"
-                  placeholderTextColor="#999"
+                  placeholderTextColor={COLORS.grey}
                   value={form.pressao}
                   onChangeText={v => setField('pressao', v)}
                   keyboardType="numeric"

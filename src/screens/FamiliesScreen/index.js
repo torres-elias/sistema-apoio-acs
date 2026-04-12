@@ -66,7 +66,7 @@ export default function FamiliesScreen({ navigation }) {
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
+            <Ionicons name="arrow-back" size={24} color={COLORS.surface} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Famílias</Text>
           <Text style={styles.headerCount}>{families.length} cadastros</Text>
@@ -139,7 +139,7 @@ export default function FamiliesScreen({ navigation }) {
                     style={styles.actionBtn}
                     onPress={() => handleRemove(item.id)}
                   >
-                    <Ionicons name="trash" size={18} color="#EF4444" />
+                    <Ionicons name="trash" size={18} color={COLORS.danger} />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
@@ -160,7 +160,7 @@ export default function FamiliesScreen({ navigation }) {
         style={styles.fab}
         onPress={() => navigation.navigate('FamilyForm')}
       >
-        <Ionicons name="add" size={32} color="#fff" />
+        <Ionicons name="add" size={32} color={COLORS.surface} />
       </TouchableOpacity>
 
       {/* MODAL DE EDIÇÃO */}

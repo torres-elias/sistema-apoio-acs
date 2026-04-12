@@ -6,7 +6,7 @@ import { db } from '../config/firebase';
 
 /**
  * FIRESTORE COLLECTION: 'visits'
- * 
+ *
  * Estrutura de um documento:
  * {
  *   familyId:       string,   // ID da família visitada
@@ -31,10 +31,11 @@ async function createVisit(data, acsUid) {
   return docRef.id;
 }
 
-async function getVisitsByFamily(familyId) {
+async function getVisitsByFamily(familyId, acsUid) {
   const q = query(
     collection(db, 'visits'),
-    where('familyId', '==', familyId)
+    where('familyId', '==', familyId),
+    where('acsUid', '==', acsUid)
   );
   const snapshot = await getDocs(q);
   return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));

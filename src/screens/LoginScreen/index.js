@@ -119,7 +119,7 @@ export default function LoginScreen() {
           </View>
 
           {/* version */}
-          <Text style={styles.version}>Sistema de Apoio ao ACS • v0.1.0</Text>
+          <Text style={styles.version}>Sistema de Apoio ao ACS • v1.0</Text>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </LinearGradient>
