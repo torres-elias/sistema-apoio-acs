@@ -21,25 +21,15 @@ O **Sistema de Apoio ao ACS** é um aplicativo mobile desenvolvido para auxiliar
 
 ## Screenshots
 
-<p align="center">
-    <img src="docs/screenshots/login.jpg" width="200" alt="Tela de Login" />
-    &nbsp;&nbsp;
-    <img src="docs/screenshots/home.jpg" width="200" alt="Dashboard" />
-    &nbsp;&nbsp;
-    <img src="docs/screenshots/families.jpg" width="200" alt="Lista de Famílias" />
-    &nbsp;&nbsp;
-    <img src="docs/screenshots/admin.jpg" width="200" alt="Painel Admin" />
-</p>
+<img src="docs/screenshots/login.jpg" width="200" alt="Tela de Login" />
+<img src="docs/screenshots/home.jpg" width="200" alt="Dashboard" />
+<img src="docs/screenshots/families.jpg" width="200" alt="Lista de Famílias" />
+<img src="docs/screenshots/admin.jpg" width="200" alt="Painel Admin" />
 
-<p align="center">
-  <img src="docs/screenshots/family-detail.jpg" width="200" alt="Detalhamento da família" />
-  &nbsp;&nbsp;
-  <img src="docs/screenshots/visit.jpg" width="200" alt="Tela de visitas" />
-  &nbsp;&nbsp;
-  <img src="docs/screenshots/add-visit.jpg" width="200" alt="Adicionar visita" />
-  &nbsp;&nbsp;
-  <img src="docs/screenshots/gerente.jpg" width="200" alt="Painel Gerente" />
-</p>
+<img src="docs/screenshots/family-detail.jpg" width="200" alt="Detalhamento da família" />
+<img src="docs/screenshots/visit.jpg" width="200" alt="Tela de visitas" />
+<img src="docs/screenshots/add-visit.jpg" width="200" alt="Adicionar visita" />
+<img src="docs/screenshots/gerente.jpg" width="200" alt="Painel Gerente" />
 
 ## Funcionalidades
 
