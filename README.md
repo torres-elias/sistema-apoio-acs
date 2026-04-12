@@ -21,15 +21,11 @@ O **Sistema de Apoio ao ACS** é um aplicativo mobile desenvolvido para auxiliar
 
 ## Screenshots
 
-<img src="docs/screenshots/login.jpg" width="200" alt="Tela de Login" />
-<img src="docs/screenshots/home.jpg" width="200" alt="Dashboard" />
-<img src="docs/screenshots/families.jpg" width="200" alt="Lista de Famílias" />
-<img src="docs/screenshots/admin.jpg" width="200" alt="Painel Admin" />
-
-<img src="docs/screenshots/family-detail.jpg" width="200" alt="Detalhamento da família" />
-<img src="docs/screenshots/visit.jpg" width="200" alt="Tela de visitas" />
-<img src="docs/screenshots/add-visit.jpg" width="200" alt="Adicionar visita" />
-<img src="docs/screenshots/gerente.jpg" width="200" alt="Painel Gerente" />
+| Tela de Login | Dashboard | Lista de Famílias | Painel Admin |
+|:---:|:---:|:---:|:---:|
+| <img src="docs/screenshots/login.jpg" width="200" alt="Tela de Login" /> | <img src="docs/screenshots/home.jpg" width="200" alt="Dashboard" /> | <img src="docs/screenshots/families.jpg" width="200" alt="Lista de Famílias" /> | <img src="docs/screenshots/admin.jpg" width="200" alt="Painel Admin" /> |
+| **Detalhamento** | **Visitas** | **Adicionar Visita** | **Gerente** |
+| <img src="docs/screenshots/family-detail.jpg" width="200" alt="Detalhamento da família" /> | <img src="docs/screenshots/visit.jpg" width="200" alt="Tela de visitas" /> | <img src="docs/screenshots/add-visit.jpg" width="200" alt="Adicionar visita" /> | <img src="docs/screenshots/gerente.jpg" width="200" alt="Painel Gerente" /> |
 
 ## Funcionalidades
 
@@ -44,10 +40,12 @@ O **Sistema de Apoio ao ACS** é um aplicativo mobile desenvolvido para auxiliar
 
 ## Arquitetura
 
-O projeto segue uma arquitetura em camadas com separação de responsabilidades:
-
 <p align="center">
-  <img src="docs/architecture_diagram.png" alt="Diagrama de Arquitetura" width="600" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/architecture_diagram_dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="docs/architecture_diagram.png">
+    <img alt="Diagrama de Arquitetura" src="docs/architecture_diagram.png" width="600">
+  </picture>
 </p>
 
 | Camada       | Responsabilidade                                  |
