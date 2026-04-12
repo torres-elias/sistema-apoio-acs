@@ -11,22 +11,22 @@ import FamilyDetailScreen from "../screens/FamilyDetailScreen";
 import VisitsScreen from "../screens/VisitsScreen";
 import AdminScreen from "../screens/AdminScreen";
 import UserFormScreen from "../screens/UserFormScreen";
+import ReportScreen from "../screens/ReportScreen";
 import COLORS from "../constants/colors";
 
 const Tab = createBottomTabNavigator();
 const AdminStack = createNativeStackNavigator();
 const FamiliesStack = createNativeStackNavigator();
 
-// Stack para a área administrativa
 function AdminStackNavigator() {
   return (
-    <AdminStack.Navigator screenOptions={{ 
+    <AdminStack.Navigator screenOptions={{
       headerStyle: { backgroundColor: COLORS.primary },
       headerTintColor: COLORS.white,
       headerTitleStyle: { fontWeight: 'bold' }
     }}>
       <AdminStack.Screen name="AdminHome" component={AdminScreen} options={{ title: 'Painel Administrativo' }} />
-      <AdminStack.Screen name="UserForm" component={UserFormScreen} options={{ title: 'Cadastrar Agente' }} />
+      <AdminStack.Screen name="UserForm" component={UserFormScreen} options={{ title: 'Cadastrar Usuário' }} />
     </AdminStack.Navigator>
   );
 }
@@ -41,9 +41,45 @@ function FamiliesStackNavigator() {
   );
 }
 
+const tabBarStyleBase = {
+  height: Platform.OS === 'android' ? 100 : 60,
+  paddingBottom: Platform.OS === 'android' ? 40 : 10,
+  paddingTop: 8,
+  backgroundColor: COLORS.surface,
+  borderTopWidth: 1,
+  borderTopColor: COLORS.border,
+  elevation: 8,
+};
+
 export default function TabNavigator() {
   const { profile } = useAuth();
+  const cargo = profile?.cargo;
 
+  // GERENTE sees only the report screen
+  if (cargo === 'GERENTE') {
+    return (
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="analytics" size={size} color={color} />
+          ),
+          tabBarActiveTintColor: COLORS.primary,
+          tabBarInactiveTintColor: COLORS.grey,
+          tabBarStyle: tabBarStyleBase,
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: '500',
+            marginBottom: Platform.OS === 'android' ? 4 : 0,
+          },
+        }}
+      >
+        <Tab.Screen name="Relatório" component={ReportScreen} />
+      </Tab.Navigator>
+    );
+  }
+
+  // ACS and ADM see the full app
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -54,37 +90,26 @@ export default function TabNavigator() {
           else if (route.name === "Familias") iconName = "people";
           else if (route.name === "Visitas") iconName = "calendar";
           else if (route.name === "AdminTab") iconName = "shield-checkmark";
-
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.grey,
-        tabBarStyle: {
-          height: Platform.OS === 'android' ? 100 : 60, 
-          // O paddingBottom garante que o ícone e o texto subam um pouco
-          paddingBottom: Platform.OS === 'android' ? 40 : 10,
-          paddingTop: 8,
-          backgroundColor: COLORS.surface,
-          borderTopWidth: 1,
-          borderTopColor: COLORS.border,
-          elevation: 8,
-        },
+        tabBarStyle: tabBarStyleBase,
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '500',
           marginBottom: Platform.OS === 'android' ? 4 : 0,
-        }
+        },
       })}
     >
       <Tab.Screen name="Dashboard" component={HomeScreen} />
       <Tab.Screen name="Familias" component={FamiliesStackNavigator} />
       <Tab.Screen name="Visitas" component={VisitsScreen} />
-      
-      {/* Exibição condicional da aba Admin */}
-      {profile?.cargo === 'ADM' && (
-        <Tab.Screen 
-          name="AdminTab" 
-          component={AdminStackNavigator} 
+
+      {cargo === 'ADM' && (
+        <Tab.Screen
+          name="AdminTab"
+          component={AdminStackNavigator}
           options={{ title: 'Admin' }}
         />
       )}
